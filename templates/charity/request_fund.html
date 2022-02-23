@@ -1,0 +1,45 @@
+{% extends 'charity/header.html' %}
+{% block content %}
+<div class="container pt-5 pb-5">
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mb-4">
+        <div class="form-outline mb-4">
+            <label class="form-label" for="name">Name</label>
+            <input type="text" class="form-control" name="name" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="address">Address</label>
+            <input type="text" class="form-control" name="address" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="phone">Contact No.</label>
+            <input type="number" class="form-control" name="phone" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" name="email" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="description">Description(Reason to request fund)</label>
+            <textarea name="desc" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="amount">Amount</label>
+            <input type="number" class="form-control" name="amount" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="image">Upload an image</label>
+            <input type="file" class="form-control"  name="image"/>
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="document">Upload a legal document</label>
+            <input type="file" class="form-control"  name="doc"/>
+        </div>
+        <div class="text-left mb-3">
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+        </div>
+    </div>
+</form>
+</div>
+{% endblock content %}

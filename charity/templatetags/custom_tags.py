@@ -1,0 +1,13 @@
+from django import template
+from django.contrib.auth.models import User
+from django.template.loader import get_template
+register = template.Library()
+import pdb
+
+@register.simple_tag(takes_context=True)
+def get_user(context):
+    request = context['request']
+    users = User.objects.get(id=request.session['user_id'])
+    admin = users.is_superuser
+    return admin
+

@@ -1,0 +1,46 @@
+{% extends "charity/header.html" %}
+{% block content %}
+
+<div class="containers">
+    <h1>About Us</h1>
+    <hr>
+    <h2>Have any questions? We'd love to hear from you</h2>
+    <div class="container-items">
+        <div class="fund-raising">
+            <h3>Fund Raising</h3>
+            <p>We collect fund for the specific person or ngo
+                without any charges. So that they can fix their financial
+                problems.
+            </p>
+            <a href="requests"><button id="f-raise"> Donate </button></a>
+        </div>
+        <div class="write-us">
+            <h3>Write Us</h3>
+            <p> You can write us if you have any queries</p>
+            <a href="#"> <button id="write">Write</button></a>
+        </div>
+        <div class="our-plans">
+            <h3> NGO </h3>
+            <p>we register NGO in this website where 
+                they will get benifit that they deserve.
+            </p>
+            <a href="ngo"><button id="contact">Register Ngo</button></a>
+        </div>
+        <div class="container2">
+        <h2>Write Us</h2>
+        <form action="" id="form">
+            <input type="email" name="email" id="email" placeholder="Enter your email">
+            <input type="text" name="name" id="name" placeholder=" enter your name">
+            <textarea name="message" id="message" cols="30" rows="10" placeholder="Enter your message here"></textarea>
+            <input type="submit" value="Send" id="submit">
+        </form>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+{% endblock content %}

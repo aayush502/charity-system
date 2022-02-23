@@ -1,0 +1,105 @@
+{% extends 'charity/header.html' %}
+
+{% load static %}
+{% block content %}
+<!-- <h1 class="text-center mt-4 text-success">Charity Management</h1> -->
+{% include 'messages.html' %}
+<div class="slider">
+  <div class="rotator">
+    <div class="items">
+      <img src="{% static 'img/image1.jpeg' %}" alt="image1">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image2.jpeg' %}" alt="image2">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image3.jpeg' %}" alt="image3">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image4.jpeg' %}" alt="image4">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image5.jpg' %}" alt="image5">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image6.jpeg' %}" alt="image6">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image7.jpeg' %}" alt="image7">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image8.jpeg' %}" alt="image8">
+    </div>
+    <div class="items">
+      <img src="{% static 'img/image9.jpeg' %}" alt="image9">
+    </div>
+  </div>
+</div>
+
+<div class="trend">
+  <div class="container">
+      <h3 class="pt-3">Top Trending</h3>
+      <h2>Fundraising For Coronavirus Relief</h2>
+
+      <div class="row">
+          <div class="col-4 ">
+              <img src="{% static 'img/coronas.jpg' %}" alt="covid-19" width="100%" style="margin-top:15px;">
+          </div>
+          <div class="col-8  text-justify pt-3">
+              <p>As COVID-19 continues to spread, more individuals, communities, and entire nations are feeling the impact in their daily lives. Beyond the global health crisis, the coronavirus is having a severe economic impact on individuals, small businesses, and medical organizations.</p>
+              <p>The urgent need for medical supplies, basic necessities, and quality healthcare is only increasing as more communities become affected by COVID-19. And with hundreds of thousands of individuals across the globe in quarantine, there is a growing need for financial support.</p>
+          </div>
+      </div>
+  </div>
+  
+  <div class="container mt-3 pb-4 ">
+    <div class="row">
+        <div class="col-8 pt-3">
+            <p class="text-justify">Thankfully, we all have the power to do something and make a difference. Here we're empowering individuals, organizations, and communities to step up in the face of the COVID-19 outbreak and help those who need it most.</p>
+            <p class="text-justify">Contribut to a nobel cause as it will be a very good deed by you - raising a hand for the people who are in need.</p>
+            <button class="btn btn-outline-primary btn-lg" onclick="location.href='charge'">Donate</button>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'img/against.jpg' %}" alt="covid-19" width="100%" style="margin-top:15px;">
+        </div>
+    </div>
+</div>
+</div>
+<div class="auto-slider">
+  <div id="slider">
+      <figure>
+          <img src="{% static 'img/slide1.jpg' %}" alt="Image">
+          <img src="{% static 'img/slide2.jpg' %}" alt="Image">
+          <img src="{% static 'img/slide3.png' %}" alt="Image">
+      </figure>
+      <div class="indicator"></div>
+</div>
+</div>
+<div class="trends">
+  <div class="container">
+    <h2>Fundraising For Flood And Landslides</h2>
+      <div class="row">
+          <div class="col-4 ">
+              <img src="{% static 'img/flood.jpg' %}" alt="covid-19" width="100%" style="margin-top:15px;">
+          </div>
+          <div class="col-8  text-justify pt-3">
+              <p>Flooding of urban areas can result in significant damage to private property, including homes and businesses. Losses occur due to damage to both the structure and contents of buildings. Insurance of the structure and its contents against flooding can reduce the impacts of floods on individuals or companies.</p>
+              <p>The urgent need for medical supplies, basic necessities, and quality healthcare is only increasing as more communities become affected by flood. And with hundreds of thousands of individuals across the globe in quarantine, there is a growing need for financial support.</p>
+          </div>
+      </div>
+  </div>
+  
+  <div class="container mt-3 pb-4 ">
+    <div class="row">
+        <div class="col-8 pt-3">
+            <p class="text-justify">Floods impact on both individuals and communities, and have social, economic, and environmental consequences. The consequences of floods, both negative and positive, vary greatly depending on the location and extent of flooding, and the vulnerability and value of the natural and constructed environments they affect.</p>
+            <p class="text-justify">Contribut to a nobel cause as it will be a very good deed by you - raising a hand for the people who are in need.</p>
+            <button class="btn btn-outline-success btn-lg" onclick="location.href='requests'">Donate</button>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'img/flood1.jpeg' %}" alt="covid-19" width="100%" style="margin-top:15px;">
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content%}

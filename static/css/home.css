@@ -1,0 +1,131 @@
+.slider{
+  position: relative;
+  width: 360px;
+  margin: 50px auto;
+  perspective: 1000px;
+}
+.rotator{
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 50%;
+  height: 150px;
+  transform-style: preserve-3d;
+  animation: roter 29s linear infinite;
+}
+.items{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid white;
+}
+.items img{
+  height: 100%;
+  width: 100%;
+  transition: all 3s ease;
+}
+.items:hover img{
+  transform: scale(1.4);
+}
+@keyframes roter{
+  from{
+    transform: rotateY(0deg);
+  }
+  to{
+    transform: rotateY(360deg);
+  }
+}
+.items:first-child{
+  transform: rotateY(calc(40deg)) translateZ(300px);
+}
+.items:nth-child(2){
+  transform: rotateY(calc(80deg)) translateZ(300px);
+}
+.items:nth-child(3){
+  transform: rotateY(calc(120deg)) translateZ(300px);
+}
+.items:nth-child(4){
+  transform: rotateY(calc(160deg)) translateZ(300px);
+}
+.items:nth-child(5){
+  transform: rotateY(calc(200deg)) translateZ(300px);
+}
+.items:nth-child(6){
+  transform: rotateY(calc(240deg)) translateZ(300px);
+}
+.items:nth-child(7){
+  transform: rotateY(calc(280deg)) translateZ(300px);
+}
+.items:nth-child(8){
+  transform: rotateY(calc(3200deg)) translateZ(300px);
+}
+.items:nth-child(9){
+  transform: rotateY(calc(360deg)) translateZ(300px);
+}
+.rotator:hover{
+  animation-play-state: paused;
+}
+
+.trend{
+  position: relative;
+  margin-top: 250px;
+}
+#local{
+  margin-bottom: 100px;
+}
+.auto-slider{
+  position: relative;
+  box-sizing: content-box;
+  display: inline-block;
+  padding: 15px 15px 20px;
+  background: #fff;
+  max-width: 1000px;
+  max-height: 350px;
+  margin-left: 70px; 
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
+div#slider{
+  overflow: hidden;
+}
+div#slider figure img{
+  width: 33%;
+  float: left;
+}
+div#slider figure{
+  position: relative;
+  width: 200%;
+  margin: 0;
+  left: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 10s sliding ease infinite;
+}
+.indicator{
+  width: 100%;
+  max-width:1000px;
+  height: 6px;
+  background: #e41b17;
+  position: absolute;
+  bottom: 0;
+  animation: indicating 5s ease infinite;
+}
+@keyframes sliding{
+  0%{left: 0%; }
+  20%{left: -100%;}
+  
+}
+@keyframes indicating{
+  from{
+      left: -100%;
+  }
+  to{
+      left: 0;
+  }
+} 
+.trends{
+  margin-bottom: 100px;
+}

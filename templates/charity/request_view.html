@@ -1,0 +1,53 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mt-4 text-primary"> Fund Request made by {{ data.name }} </h1>
+    <hr style="width: 100%;">
+    <div class="row text-center mt-4">
+        <div class="col-sm-6">
+            <p>Full Name</p>
+            <p>{{ data.name }}</p>
+        </div>
+        <div class="col-sm-6">
+            <p>Address</p>
+            <p>{{ data.address }}</p>
+        </div>
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-sm-6">
+            <p>Contact No.</p>
+            <p>{{ data.phone }}</p>
+        </div>
+        <div class="col-sm-6">
+            <p>Email</p>
+            <p>{{ data.email }}</p>
+        </div>
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-sm-6">
+            <p>Description</p>
+            <p>{{ data.description }}</p>
+        </div>
+        <div class="col-sm-6">
+            <p>Amount</p>
+            <p>{{ data.amount }}</p>
+        </div>
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-sm-6">
+            <p>Image Uploaded</p>
+            <p><a href="{{ data.image.url }}" class="btn btn-outline-info" target="blank">Image</a></td></p>
+        </div>
+        <div class="col-sm-6">
+            <p>Document Uploaded</p>
+            <p><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td></p>
+        </div>
+    </div>
+    <hr style="width: 100%;">
+    <div class="col text-center" style="margin-bottom: 100px;">
+        {% if data.verification_status %}
+        <a href="{% url 'charge' data.id %}" class="card-link btn btn-default btn-outline-info">Donate </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

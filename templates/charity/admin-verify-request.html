@@ -1,0 +1,65 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{% url 'admin-verify-request' %}">Request Verify</a>
+    <a href="{% url 'admin-verify-ngo' %}">Ngo Verify</a>
+  </div>
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+<div id="main">
+  <table class="table">
+    <thead>
+        <tr>
+            <th>SN</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Image</th>
+            <th>Document</th>
+            <th>Verify (Y/N) ?</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+          {% for d in data %}
+            <td>{{forloop.counter}}</td>
+            <td>{{d.name}}</td>
+            <td>{{d.address}}</td>
+            <td>{{d.phone}}</td>
+            <td>{{d.email}}</td>
+            <td>{{d.description}}</td>
+            <td>{{d.amount}}</td>
+            <td><a href="{{ d.image.url }}" class="btn btn-outline-info" target="blank">Image</a></td>
+            <td><a href="{{ d.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td>
+            <td>
+              {% if d.verification_status is None %}
+                  <a href="{% url 'request_verified_as_true' d.id %}" class="mr-2 ml-2"><button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button></a>
+                  <a href="{% url 'request_verified_as_false' d.id %}"><button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button></a>
+              {% elif d.verification_status is True %}
+                  <button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button>
+              {% elif d.verification_status is False %}
+                  <button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button>
+              {% endif %}
+          </td> 
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+  document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+  document.body.style.backgroundColor = "white";
+}
+</script>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends "charity/header.html" %}
+{% block content %}
+{% load static %}
+<div class="container mt-5 mb-5">
+  <div class="col" style="margin-bottom: 20px;">
+   Category 
+  <select class="js-example-basic-single" id="cat" style="width: 80px;" onchange="location=this.value;">
+    <option value="">Select an option</option>
+    <option value="requests"> User </option>
+    <option value="ngo-request"> NGO </option>
+  </select>
+  </div>
+  <div class="row">
+  {% for d in data %}
+  <div class="col-sm-4 mb-3">
+  <a style="text-decoration: none; color: black;" href="{% url 'requests' d.id %}">
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{d.image.url}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{d.name}}</h5>
+          Email:<p class="card-text">{{d.email}}</p>
+          Amount:<p class="card-text">{{d.amount}}</p>
+          {% if d.verification_status is Null or d.verification_status is False%}
+          <h6>Status: Pending </h6>
+          {% elif d.verification_status is True %}
+          <h6>Status: Verified </h6>
+          {% endif %}
+      </div>
+      <div class="card-body">
+        {% if d.verification_status is True %}
+        <a href="{% url 'charge' d.id %}" class="card-link btn btn-outline-info">Donate </a>
+        {% endif %}
+      </div>
+  </div>
+</a>
+</div>
+{% endfor %}
+</div>
+</div>
+<script>
+$(document).ready(function() {
+  $('.js-example-basic-single').select2();
+  // $('#cat').on("select2:select", function(e){
+  //   if(this.value=='ngo-request'){
+  //     window.location = 'ngo-request';
+  //   }
+  //   else{
+  //     window.location='requests'
+  //   }
+  // });
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

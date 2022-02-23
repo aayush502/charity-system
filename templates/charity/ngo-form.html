@@ -1,0 +1,44 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<h2 class="text-center mt-4 text-success">NGO</h2>
+<div class="container pt-5 pb-5">
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" hidden value="" name="ngo_user">
+    <div class="row mb-4">
+        <div class="form-outline mb-4">
+            <label class="form-label" for="name"> Ngo Name</label>
+            <input type="text" class="form-control" name="name" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="head_of_ngo">Head Of Ngo</label>
+            <input type="text" class="form-control" name="head" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="phone">Contact No.</label>
+            <input type="number" class="form-control" name="phone" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" name="email" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="form6Example3">Registration certificate Trust Society</label>
+            <input type="file" class="form-control"  name="certificate1"/>
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="certificate">Certificate 12A</label>
+            <input type="file" class="form-control" name="certificate2" />
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="certificate">Benificiary Profiles</label>
+            <input type="file" class="form-control" name="profile" />
+        </div>
+        <div class="text-left mb-3">
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+        </div>
+    </div>
+</form>
+</div>
+
+{% endblock content %}

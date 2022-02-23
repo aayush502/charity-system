@@ -1,0 +1,64 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{% url 'admin-verify-request' %}">Request Verify</a>
+    <a href="{% url 'admin-verify-ngo' %}">Ngo Verify</a>
+</div>
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+  <div id="main">
+  <table class="table mt-5 mb-5">
+    <thead>
+        <tr>
+            <th>SN</th>
+            <th>Name</th>
+            <th>NGO's Head</th>
+            <th>Contact_No. ( +977 )</th>
+            <th>Email</th>
+            <th>Registration Certificate</th>
+            <th>12A Certificate</th>
+            <th>Beneficiary Profile</th>
+            <th>Verified (Y/N ) ?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for val in ngo %}
+            <td>{{forloop.counter}}</td>
+            <td>{{ val.ngo_name }}</td>
+            <td>{{ val.head_of_ngo }}</td>
+            <td> <a class="text-decoration-none text-body"> {{ val.contactNo }} </a></td>
+            <td>{{ val.email }}</td>
+            <td><a href="{{ val.registration_cerificate_Trust_Society.url }}" class="btn btn-outline-info" target="blank">Certificate</a></td>
+            <td><a href="{{ val.certificate_12A.url }}" class="btn btn-outline-info" target="blank">Certificate</a></td>
+            <td><a href="{{ val.beneficiary_profiles.url }}" class="btn btn-outline-info" target="blank">Certificate</a></td>
+            <td>
+                {% if val.verification_status is None %}
+                    <a href="{% url 'ngo_verified_as_true' val.id %}" class="mr-2 ml-2"><button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button></a>
+                    <a href="{% url 'ngo_verified_as_false' val.id %}"><button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button></a>
+                {% elif val.verification_status is True %}
+                    <button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button>
+                {% elif val.verification_status is False %}
+                    <button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button>
+                {% endif %}
+            </td> 
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+      document.body.style.backgroundColor = "white";
+    }
+    </script>
+{% endblock content %}
