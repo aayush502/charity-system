@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django_currentuser.middleware import get_current_authenticated_user, get_current_user
 import django.http.request as request
@@ -48,3 +49,11 @@ class NGO(models.Model):
     def __str__(self):
         return self.ngo_name
 
+
+class DonorList(models.Model):
+    email = models.EmailField(blank=True)
+    name = models.CharField(max_length=100, blank=True)
+    amount = models.BigIntegerField(blank=True)
+    message = models.CharField(max_length=1000, blank=True)
+    donated_to = models.IntegerField(blank=True)
+    current_user = models.BigIntegerField(blank=True)

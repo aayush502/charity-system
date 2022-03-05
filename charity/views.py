@@ -1,3 +1,4 @@
+from email import message
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -10,6 +11,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http.response import JsonResponse, HttpResponse
 from .forms import *
+from charity.tasks import *
+import pdfkit
+# from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
 class HomeView(View):
     def get(self, request):
@@ -76,10 +80,22 @@ def charge(request, id):
             currency="INR",
             description = "Donation",
         )
-    return redirect('success')
+        donor = DonorList.objects.create(email=request.POST['email'], name=request.POST['name'], amount=request.POST['amount'], message=request.POST['desc'], current_user = request.user.id, donated_to = id)
+        request_list = FundRequestModel.objects.all()
+        fund_list = []
+        for requests in request_list:
+            if(donor.donated_to == requests.id):
+                fund_list.append(requests)
+        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}', "donate.pdf")  
+        return render(request, "charity/success.html", context={"donor":donor, "reciever":fund_list[0]})
 
-def success(request):
-    return render(request, "charity/success.html", context={})
+# class GeneratePdf(View):
+#     def get(self, request, id):
+#         config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+#         pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False,configuration=config)
+#         response = HttpResponse(pdf,content_type='application/pdf')
+#         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
+#         return response
 
 class khaltiView(View):
     def get(self, request):
@@ -100,23 +116,11 @@ class AdminRequestView(View):
         return render(request, "charity/admin-verify-request.html", context={"data":data})
 
 def verification_true(self,id):
-    fund_request = get_object_or_404(FundRequestModel, id=id)
-    fund_request.verification_true()
-    subject = 'Request Verified'
-    message = f'Hi {fund_request.name}, your request for the charity is verified by admins. you will now recieve funds.'
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [fund_request.email]
-    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+    send_mail_true_task.delay(id)
     return redirect('admin-verify-request')
 
 def verification_false(self, id):
-    fund_request = get_object_or_404(FundRequestModel, id=id)
-    fund_request.verification_false()
-    subject = 'Request Rejected'
-    message = f'Hi {fund_request.name}, your request for the charity in charity system is rejected by admins. Request again with proper documents'
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [fund_request.email]
-    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+    send_mail_false_task.delay(id)
     return redirect('admin-verify-request')
 
 class NGOView(View):
@@ -138,38 +142,29 @@ class NGOView(View):
         messages.success(request, "Your request has been submitted and will be verified by admins.")
         return redirect("home")
 
-
 class NGOVerification(View):
     def get(self, request):
         ngo = NGO.objects.all()
         return render(request, "charity/admin-verify-ngo.html", context={"ngo":ngo})
 
 def ngo_verification_true(self,id):
-    # is_ngo = NewUser.objects.get(id=request.user.id)
-    # is_ngo.verification_true()
-    ngo_request = get_object_or_404(NGO, id=id)
-    ngo_request.verification_true()
-    subject = 'NGO Verified'
-    message = f'Hi {ngo_request.ngo_name}, your request for the ngo creation is successful. '
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [ngo_request.email]
-    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+    ngo_email_true_task.delay(id)
     return redirect('admin-verify-ngo')
 
 def ngo_verification_false(self, id):
-    ngo_request = get_object_or_404(NGO, id=id)
-    ngo_request.verification_false()
-    subject = 'Request Rejected'
-    message = f'Hi {ngo_request.name}, your request for the ngo creation is denied by admins please send proper details to register you ngo'
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [ngo_request.email]
-    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+    ngo_email_false_task.delay(id)
     return redirect('admin-verify-ngo')
 
 class RequestsView(View):
     def get(self, request, id):
         fund = FundRequestModel.objects.filter(id=id).first()
-        return render(request, "charity/request_view.html", context={"data":fund})
+        donor_list = DonorList.objects.all()
+        # fund_request = FundRequestModel.objects.all()
+        lists = []
+        for donor in donor_list:
+            if(donor.donated_to  == fund.id):
+                lists.append(donor)
+        return render(request, "charity/request_view.html", context={"data":fund, "donor":lists})
 
 class NgoRequestView(View):
     def get(self, request):

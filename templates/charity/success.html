@@ -1,8 +1,38 @@
 {% extends "charity/header.html" %}
 {% load static %}
 {% block content %}
-<div class="h1 mt-5 mb-5">
+<div class="h1 text-center mt-5 mb-5">
     Thank You For your Donation
+</div>
+<div class="row text-center mt-4">
+    <div class="col-sm-6">
+        <p>Name</p>
+        <p>{{ donor.name }}</p>
+    </div>
+    <div class="col-sm-6">
+        <p>Amount</p>
+        <p>{{ donor.amount }}</p>
+    </div>
+</div>
+<div class="row text-center mt-4">
+    <div class="col-sm-6">
+        <p>Email</p>
+        <p>{{ donor.name }}</p>
+    </div>
+    <div class="col-sm-6">
+        <p>Donated Amount</p>
+        <p>{{ donor.message }}</p>
+    </div>
+</div>
+<div class="row text-center mt-4">
+    <div class="col-sm-6">
+        <p>Donated To</p>
+        <p>{{ reciever.name }}</p>
+    </div>
+    <div class="col-sm-6">
+        <p>Reciever Email</p>
+        <p>{{ reciever.email }}</p>
+    </div>
 </div>
 
 <a href="{% url 'home' %}">Go Back To Home</a>

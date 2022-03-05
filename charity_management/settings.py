@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@1bmp#b9+z7ln+gbr_m7=sq2kw4+!7v-@p(v9i6l!l=-ag5-he'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -40,8 +40,11 @@ INSTALLED_APPS = [
     'crispy_forms',
     'charity',
     'jquery',
+    'wkhtmltopdf',
 ]
-
+# WKHTMLTOPDF_CMD_OPTIONS = {
+#     'quiet': True,
+# }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -134,6 +137,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 AUTH_USER_MODEL = 'user.NewUser'
+
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
     'user.backends.CaseInsensetiveModelBackend'
@@ -165,6 +170,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "testingdjango987@gmail.com"
 EMAIL_HOST_PASSWORD = "testing321@"
 
-CELERY_BROKER_URL = 'redis://:p2dec2818f64a933017c2e8ae6aabbf7763d19dbf7df6750b36fa2b9b3cdcb872@ec2-34-231-237-66.compute-1.amazonaws.com:13020'
-CELERY_ACCEPT_CONTENT = ['json']
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
