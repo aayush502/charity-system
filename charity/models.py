@@ -9,7 +9,7 @@ class FundRequestModel(models.Model):
     email = models.EmailField(blank=True)
     description = models.CharField(max_length=1000, null=False)
     amount = models.IntegerField(null=False, default=False)
-    image = models.ImageField(upload_to= 'images/')
+    image = models.ImageField(upload_to= 'images/') 
     document = models.FileField(upload_to= 'documents/')
     verification_status = models.BooleanField(null=True)
     current_user = models.CharField(default=get_current_user, blank=True, max_length=40)

@@ -33,7 +33,6 @@ class RequestFund(View):
             data = FundRequestModel.objects.all()
             return render(request, "charity/request_fund.html", context={"data": data})
 
-
     def post(self, request):
         name = request.POST['name']
         address = request.POST['address']
@@ -41,9 +40,10 @@ class RequestFund(View):
         email = request.POST['email']
         description = request.POST['desc']
         amount = request.POST['amount']
-        image = request.FILES['image']
+        images = request.FILES.getlist('images')
         document = request.FILES['doc']
-        FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, image=image, document=document, current_user = request.user.id)
+        for image in images:
+            FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, image=image, document=document, current_user = request.user.id)
         messages.success(request, "Your request has been submitted and will be verified by admins.")
         return redirect('requests')
 

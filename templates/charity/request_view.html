@@ -3,54 +3,13 @@
 <div class="container">
     <h1 class="text-center mt-4 text-primary"> Fund Request made by {{ data.name }} </h1>
     <hr style="width: 100%;">
- 
-    <div class="row text-center mt-4">
-        <div class="col-sm-6">
-            <p>Full Name</p>
-            <p>{{ data.name }}</p>
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{data.image.url}}" class="img-fluid" alt="image">
         </div>
-        <div class="col-sm-6">
-            <p>Address</p>
-            <p>{{ data.address }}</p>
+        <div class="col-md-6">
+            <p>{{data.description}}</p>
         </div>
-    </div>
-    <div class="row text-center mt-4">
-        <div class="col-sm-6">
-            <p>Contact No.</p>
-            <p>{{ data.phone }}</p>
-        </div>
-        <div class="col-sm-6">
-            <p>Email</p>
-            <p>{{ data.email }}</p>
-        </div>
-    </div>
-    <div class="row text-center mt-4">
-        <div class="col-sm-6">
-            <p>Description</p>
-            <p>{{ data.description }}</p>
-        </div>
-        <div class="col-sm-6">
-            <p>Amount</p>
-            <p>Rs {{ data.amount }}</p>
-        </div>
-    </div>
-
-    <div class="row text-center mt-6">
-        <div class="col-sm-6">
-            <p>Image Uploaded</p>
-            <p><a href="{{ data.image.url }}" class="btn btn-outline-info" target="blank">Image</a></td></p>
-        </div>
-        <div class="col-sm-6">
-            <p>Document Uploaded</p>
-            <p><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td></p>
-        </div>
-    </div>
-    <div class="col-sm">
-        <p>People who donated {{ data.name }}</p>
-        {% for d in donor %}
-        <p>{{ d.name }} --> Rs {{ d.amount }}</p>
-        <hr>
-        {% endfor %}
     </div>
     <hr style="width: 100%;">
     <div class="col text-center" style="margin-bottom: 100px;">
@@ -60,3 +19,60 @@
     </div>
 </div>
 {% endblock content %}
+
+
+
+<!-- <div class="row text-center mt-4">
+        <div class="col-sm">
+        <div class="col-md-6">
+            <p>Full Name</p>
+            <p>{{ data.name }}</p>
+        </div>
+        <div class="col-md-6">
+            <p>Address</p>
+            <p>{{ data.address }}</p>
+        </div>
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-md-6">
+            <p>Contact No.</p>
+            <p>{{ data.phone }}</p>
+        </div>
+        <div class="col-md-6">
+            <p>Email</p>
+            <p>{{ data.email }}</p>
+        </div>
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-md-6">
+            <p>Description</p>
+            <p>{{ data.description }}</p>
+        </div>
+        <div class="col-md-6">
+            <p>Amount</p>
+            <p>Rs {{ data.amount }}</p>
+        </div>
+    </div>
+
+    <div class="row text-center mt-4">
+        <div class="col-md-6">
+            <p>Image Uploaded</p>
+            <p><a href="{{ data.image.url }}" class="btn btn-outline-info" target="blank">Image</a></td></p>
+        </div>
+        <div class="col-md-6">
+            <p>Document Uploaded</p>
+            <p><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td></p>
+        </div>
+    </div>
+</div>
+<div class="row text-center mt-6">
+        <div class="col-sm">
+    <div class="col-md-6">
+        <p>People who donated {{ data.name }}</p>
+        {% for d in donor %}
+        <p>{{ d.name }}  Rs {{ d.amount }}</p>
+        <hr>
+        {% endfor %}
+    </div>
+    </div>
+</div> -->
