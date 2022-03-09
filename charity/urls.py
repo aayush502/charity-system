@@ -7,7 +7,7 @@ from django.conf.urls import re_path, url
 urlpatterns = [
     path('',HomeView.as_view(), name='home'),
     path('about', AboutView.as_view(), name="about"),
-    path('fund_request', RequestFund.as_view(), name="fund_request"),
+    url(r'^fund_request/$', RequestFund.as_view(), name="fund_request"),
     path('requests', Requests.as_view(), name="requests"),
     path('charge/<int:id>', charge, name="charge"),
     path('ngo', NGOView.as_view(), name="ngo"), 
@@ -20,5 +20,5 @@ urlpatterns = [
     path("request_verified_as_false/<id>", verification_false, name="request_verified_as_false"),
     path("ngo_verified_as_true/<id>", ngo_verification_true, name="ngo_verified_as_true"),
     path("ngo_verified_as_true/<id>", ngo_verification_false, name="ngo_verified_as_false"),
-    path("requests/<int:id>", RequestsView.as_view(), name="requests"),
+    url(r'^requests/(?P<pk>[\w-]+)/$', RequestsView.as_view(), name="requests"),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -42,8 +42,9 @@ class RequestFund(View):
         amount = request.POST['amount']
         images = request.FILES.getlist('images')
         document = request.FILES['doc']
+        fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, document=document, current_user = request.user.id)
         for image in images:
-            FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, image=image, document=document, current_user = request.user.id)
+            MultipleImage.objects.create(images=image, fund=fund_request)
         messages.success(request, "Your request has been submitted and will be verified by admins.")
         return redirect('requests')
 
@@ -52,15 +53,14 @@ class Requests(View):
         if 'user_id' not in request.session:
             return redirect('/login')
         else:
-            # ngo_data = NGO.objects.all()
             fund_request_data = FundRequestModel.objects.all()
-            # a = []
-            # for data in ngo_data:
-            #     for fund_data in fund_request_data:
-            #         if(data.current_user != fund_data.current_user):
-            #             a.append(fund_data)
-
-            return render(request, "charity/requests.html", context={"data":fund_request_data})
+            a=[]
+            for fund_request in fund_request_data:
+                image = MultipleImage.objects.filter(fund=fund_request.id)
+                a.append(image)
+            # for fund_request in fund_request_data:
+            #     image = MultipleImage.objects.filter(fund=fund_request.id)
+            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":a})
     
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
@@ -113,7 +113,13 @@ class khaltiView(View):
 class AdminRequestView(View):
     def get(self, request):
         data = FundRequestModel.objects.all()
-        return render(request, "charity/admin-verify-request.html", context={"data":data})
+        image = MultipleImage.objects.all()
+        # a=[]
+        # for d in data:
+        #     for img in image:
+        #         if(img.fund==d.id):
+        #             a.append(img)
+        return render(request, "charity/admin-verify-request.html", context={"data":data,"img":image})
 
 def verification_true(self,id):
     send_mail_true_task.delay(id)
@@ -156,15 +162,16 @@ def ngo_verification_false(self, id):
     return redirect('admin-verify-ngo')
 
 class RequestsView(View):
-    def get(self, request, id):
-        fund = FundRequestModel.objects.filter(id=id).first()
+    def get(self, request, pk):
+        fund = FundRequestModel.objects.filter(id=pk).first()
+        image = MultipleImage.objects.filter(fund=pk)
         donor_list = DonorList.objects.all()
         # fund_request = FundRequestModel.objects.all()
         lists = []
         for donor in donor_list:
-            if(donor.donated_to  == fund.id):
+            if(donor.donated_to == fund.id):
                 lists.append(donor)
-        return render(request, "charity/request_view.html", context={"data":fund, "donor":lists})
+        return render(request, "charity/request_view.html", context={"data":fund, "donor":lists, "img":image})
 
 class NgoRequestView(View):
     def get(self, request):

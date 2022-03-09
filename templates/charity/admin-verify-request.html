@@ -32,7 +32,11 @@
             <td>{{d.email}}</td>
             <td>{{d.description}}</td>
             <td>{{d.amount}}</td>
-            <td><a href="{{ d.image.url }}" class="btn btn-outline-info" target="blank">Image</a></td>
+            {% for i in img %}
+              {% if i.fund == d %}
+                <td><a href="{{ i.images.url }}" class="btn btn-outline-info" target="blank">Image</a></td>
+              {% endif %}
+            {% endfor %}
             <td><a href="{{ d.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td>
             <td>
               {% if d.verification_status is None %}

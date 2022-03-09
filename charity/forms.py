@@ -5,4 +5,4 @@ class FundRequestForm(forms.ModelForm):
   
     class Meta:
         model = FundRequestModel
-        fields = ['description', 'amount', 'image', 'document']
+        fields = ['description', 'amount', 'document']
