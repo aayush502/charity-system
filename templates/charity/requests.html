@@ -1,6 +1,8 @@
 {% extends "charity/header.html" %}
 {% block content %}
 {% load static %}
+{% load custom_tags %}
+{% include 'messages.html' %}
 <div class="container mt-5 mb-5">
   <div class="col" style="margin-bottom: 20px;">
    Category 
@@ -12,10 +14,15 @@
   </div>
   <div class="row">
     {% for d in data %}
+    {% if d.amount|to_int != d.amount_recieved|to_int and d.amount|to_int > d.amount_recieved|to_int %}
     <div class="col-sm-4 mb-3">
       <a style="text-decoration: none; color: black;" href="{% url 'requests' d.id %}">
         <div class="card" style="width: 18rem;">
-          
+          {% for i in img %}
+            {% if i.fund == d %}
+              <img src="{{i.images.url}}" class="card-img-top" alt="image">
+            {% endif %}
+          {% endfor %}
         <div class="card-body">
           <h5 class="card-title">{{d.name}}</h5>
           Email:<p class="card-text">{{d.email}}</p>
@@ -34,6 +41,7 @@
     </div>
   </a>
 </div>
+{% endif %}
 {% endfor %}
 </div>
 </div>

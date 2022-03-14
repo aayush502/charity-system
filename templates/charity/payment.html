@@ -37,7 +37,8 @@
 
 <script src="https://js.stripe.com/v3/"></script>
 
-
+<div class="container">
+  <h1 style="color: #10a195;">Donate some amount to {{ user.name }}</h1>
 <form action="{% url 'charge' user.id %}" method="post" id="payment-form">
   {% csrf_token %}
     <input type="number" placeholder="Enter the amount you want to donate " name="amount" class="form-control mt-2">
@@ -64,7 +65,7 @@
    <input  class="myButton" style="background-color:#10a195" type="submit" value="Submit Payment" name="">
 
 </form>
-
+</div>
 <script>
   // Create a Stripe client.
   var stripe = Stripe('pk_test_51JtRchSEz4lBqp0qe7grngedarZhoX1V9mMy10oYv8ebw3vJ89I2mCJDck5q6nhYmGAPEKQ1spnhS0HymeF6uEt7008okczpXq');

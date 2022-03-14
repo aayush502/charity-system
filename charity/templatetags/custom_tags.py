@@ -10,4 +10,11 @@ def get_user(context):
     users = User.objects.get(id=request.session['user_id'])
     admin = users.is_superuser
     return admin
+    
+@register.filter()
+def to_int(value):
+    return int(value)
 
+@register.filter()
+def one_image(value, *args,**kwargs):
+    pdb.set_trace()

@@ -7,7 +7,8 @@
 </div>
   <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
   <div id="main">
-  <table class="table mt-5 mb-5">
+  <input class="form-control" id="tableSearch" type="text" placeholder="Search" style="width: 200px;">
+  <table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>SN</th>
@@ -21,7 +22,7 @@
             <th>Verified (Y/N ) ?</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
         <tr>
             {% for val in ngo %}
             <td>{{forloop.counter}}</td>
@@ -60,5 +61,14 @@
       document.getElementById("main").style.marginLeft= "0";
       document.body.style.backgroundColor = "white";
     }
+    //This is the search in the admin table
+    $(document).ready(function(){
+    $("#tableSearch").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
     </script>
 {% endblock content %}

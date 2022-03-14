@@ -1,4 +1,5 @@
 {% extends "charity/header.html" %}
+{% load custom_tags %}
 {% block content %}
 <div class="container">
     <h1 class="text-center mt-4 text-primary"> Fund Request made by {{ data.name }} </h1>
@@ -48,11 +49,35 @@
         </div>
     </div>
     <div class="row text-center mt-4">
+        <div class="col-md-6">
+            <p>Amount Recieved</p>
+            <p>Rs {{ data.amount_recieved }}</p>
+        </div>
+        <div class="col-md-6">
+            <p>Organization Name</p>
+            {% if data.organization_name %}
+                <p>{{ data.organization_name}}</p>
+            {% else %}
+                <p> None </p>
+            {% endif %}
+        </div>
+    </div>
+    {% if data.current_user|to_int == request.user.id %}
+    <p class="text-center">Operations</p>
+    <div class="row text-center mt-4">
+        <div class="col-md">
+            <p><a href="{% url 'update' data.id %}" class="btn btn-outline-success" target="blank">Update</a></p>
+        </div>
+        <div class="col-md">
+            <p><a href="{% url 'delete' data.id %}" class="btn btn-outline-danger" target="blank">Delete</a></p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row text-center mt-4">
         <div class="col-md">
             <p>People who donated {{ data.name }}</p>
             {% for d in donor %}
-            <p>{{ d.name }}  Rs {{ d.amount }}</p>
-            <hr>
+            <p>{{ d.name }} --> Rs {{ d.amount }}</p>
             {% endfor %}
         </div>
     </div>

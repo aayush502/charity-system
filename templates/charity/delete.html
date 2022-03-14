@@ -1,0 +1,16 @@
+{% extends "charity/header.html" %}
+{% block content %} 
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-body">
+            <p>Are you sure you want to delete "{{data.name}}"?</p>
+            <form action="{% url 'delete' data.id %}" method="POST">
+                {% csrf_token %}
+                <a class="btn btn-warning" href="{% url 'requests' data.id %}">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

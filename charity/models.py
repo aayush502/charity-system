@@ -1,8 +1,5 @@
 from django.db import models
 from django_currentuser.middleware import get_current_authenticated_user, get_current_user
-import django.http.request as request
-
-
 
 class FundRequestModel(models.Model):
     name = models.CharField(max_length=100, blank=True)
@@ -11,7 +8,8 @@ class FundRequestModel(models.Model):
     email = models.EmailField(blank=True)
     description = models.CharField(max_length=1000, null=False)
     amount = models.IntegerField(null=False, default=False)
-    # image = models.ImageField(blank=True)
+    amount_recieved = models.BigIntegerField(null=True, default=0)
+    organization_name = models.CharField(max_length=100, blank=True, null=True)
     document = models.FileField(upload_to= 'documents/')
     verification_status = models.BooleanField(null=True)
     current_user = models.CharField(default=get_current_user, blank=True, max_length=40)

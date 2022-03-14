@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.http import request
 from django.urls import path, include
 from .views import *
@@ -21,4 +22,7 @@ urlpatterns = [
     path("ngo_verified_as_true/<id>", ngo_verification_true, name="ngo_verified_as_true"),
     path("ngo_verified_as_true/<id>", ngo_verification_false, name="ngo_verified_as_false"),
     url(r'^requests/(?P<pk>[\w-]+)/$', RequestsView.as_view(), name="requests"),
+    path('search',Search.as_view(), name="search"),
+    path('update/<id>', UpdateRequest.as_view(), name="update"),
+    path('delete/<id>', delete, name="delete"),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

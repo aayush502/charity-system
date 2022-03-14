@@ -7,7 +7,8 @@
   </div>
   <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
 <div id="main">
-  <table class="table">
+  <input class="form-control" id="tableSearch" type="text" placeholder="Search" style="width: 200px;">
+  <table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>SN</th>
@@ -22,7 +23,7 @@
             <th>Verify (Y/N) ?</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
       <tr>
           {% for d in data %}
             <td>{{forloop.counter}}</td>
@@ -32,11 +33,13 @@
             <td>{{d.email}}</td>
             <td>{{d.description}}</td>
             <td>{{d.amount}}</td>
+            <td>
             {% for i in img %}
               {% if i.fund == d %}
-                <td><a href="{{ i.images.url }}" class="btn btn-outline-info" target="blank">Image</a></td>
+               <a href="{{ i.images.url }}" class="btn btn-outline-info" target="blank">Image</a>
               {% endif %}
             {% endfor %}
+            </td>
             <td><a href="{{ d.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td>
             <td>
               {% if d.verification_status is None %}
@@ -65,5 +68,14 @@ function closeNav() {
   document.getElementById("main").style.marginLeft= "0";
   document.body.style.backgroundColor = "white";
 }
+//This is the search in the admin table
+$(document).ready(function(){
+  $("#tableSearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 </script>
 {% endblock content %}

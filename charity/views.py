@@ -1,4 +1,3 @@
-from email import message
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -13,6 +12,7 @@ from django.http.response import JsonResponse, HttpResponse
 from .forms import *
 from charity.tasks import *
 import pdfkit
+import os
 # from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
 class HomeView(View):
@@ -40,9 +40,10 @@ class RequestFund(View):
         email = request.POST['email']
         description = request.POST['desc']
         amount = request.POST['amount']
+        organization = request.POST['org']
         images = request.FILES.getlist('images')
         document = request.FILES['doc']
-        fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, document=document, current_user = request.user.id)
+        fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, organization_name=organization, document=document, current_user = request.user.id)
         for image in images:
             MultipleImage.objects.create(images=image, fund=fund_request)
         messages.success(request, "Your request has been submitted and will be verified by admins.")
@@ -54,13 +55,10 @@ class Requests(View):
             return redirect('/login')
         else:
             fund_request_data = FundRequestModel.objects.all()
-            a=[]
-            for fund_request in fund_request_data:
-                image = MultipleImage.objects.filter(fund=fund_request.id)
-                a.append(image)
+            image = MultipleImage.objects.all()
             # for fund_request in fund_request_data:
             #     image = MultipleImage.objects.filter(fund=fund_request.id)
-            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":a})
+            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":image})
     
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
@@ -81,6 +79,12 @@ def charge(request, id):
             description = "Donation",
         )
         donor = DonorList.objects.create(email=request.POST['email'], name=request.POST['name'], amount=request.POST['amount'], message=request.POST['desc'], current_user = request.user.id, donated_to = id)
+        fund_model = FundRequestModel.objects.filter(id=id)
+        for f in fund_model:
+            amount = request.POST['amount']
+            recieved_amount = int(f.amount_recieved)
+            recieved_amount += int(amount)
+            fund_model.update(amount_recieved = recieved_amount)
         request_list = FundRequestModel.objects.all()
         fund_list = []
         for requests in request_list:
@@ -183,3 +187,50 @@ class NgoRequestView(View):
                 if(data.current_user == fund_data.current_user):
                     a.append(fund_data)        
         return render(request, "charity/ngo_request.html", context={"data":a})
+
+class Search(View):
+    def get(self, request):
+        query = self.request.GET.get('q')
+        return FundRequestModel.objects.filter(name=query)
+
+class UpdateRequest(View):
+    def get(self, request , id):
+        fund_request = FundRequestModel.objects.filter(id=id).first()
+        images = MultipleImage.objects.filter(fund=id).first()
+        return render(request, "charity/update_request.html", context={"data":fund_request, "img":images})
+    
+    def post(self, request, id):
+        fund_request = FundRequestModel.objects.get(id=id)
+        # fund_images = MultipleImage.objects.filter(fund=fund_request)
+        if len(request.FILES)!=0:
+            if len(fund_request.document) > 0:
+                os.remove(fund_request.document.path)
+            fund_request.document = request.FILES.get('doc')
+        # if len(request.FILES.getlist('images')) != 0:
+        #     for f in fund_images:
+        #         os.remove(f.images.path)
+        #         get_images = request.FILES.getlist('images')
+        #         for image in get_images:
+        #             f.images = image
+        #     fund_images.update()
+        fund_request.name = request.POST['name']
+        fund_request.address = request.POST['address']
+        fund_request.phone = request.POST['phone']
+        fund_request.email = request.POST['email']
+        fund_request.description = request.POST['desc']
+        fund_request.amount = request.POST['amount']
+        fund_request.organization = request.POST['org']
+        fund_request.save()
+        return redirect('home')
+
+def delete(request, id):
+    if request.method == "GET":
+        fund_request = FundRequestModel.objects.get(id=id)
+        return render(request, "charity/delete.html", context={"data":fund_request})
+    if request.method == "POST":
+        fund_request = FundRequestModel.objects.get(id=id)
+        images = MultipleImage.objects.filter(fund=fund_request)
+        fund_request.delete()
+        for img in images:
+            img.delete()
+        return redirect('requests')
