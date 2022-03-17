@@ -193,7 +193,6 @@ class Search(View):
     def post(self, request):
         searched = request.POST['search']
         found = FundRequestModel.objects.filter(name=searched)
-        pdb.set_trace()
         return render(request, "charity/search.html", context={"found":found})
 
 class UpdateRequest(View):
