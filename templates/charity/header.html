@@ -79,8 +79,9 @@
        </li>
         {% endif %}
       </li>
-      <form action="{% url 'search' %}" class="d-flex">
-        <input type="text" class="form-control me-2">
+      <form action="{% url 'search' %}" method="post" class="d-flex">
+        {% csrf_token %}
+        <input type="text" name="search" class="form-control me-2">
         <button type="submit" class="btn-primary">
           Search
         </button>

@@ -110,9 +110,10 @@ class khaltiView(View):
         url = "https://khalti.com/api/v2/merchant-transaction/"
         payload = {}
         headers = {
-        "Authorization": "Key test_secret_key_f59e8b7d18b4499ca40f68195a846e9b"
+        "Authorization": "test_secret_key_e43b5e00c2dc4048a44f908023018b4b"
         }
         response = requests.get(url, payload, headers = headers)
+        return response
 
 class AdminRequestView(View):
     def get(self, request):
@@ -189,9 +190,11 @@ class NgoRequestView(View):
         return render(request, "charity/ngo_request.html", context={"data":a})
 
 class Search(View):
-    def get(self, request):
-        query = self.request.GET.get('q')
-        return FundRequestModel.objects.filter(name=query)
+    def post(self, request):
+        searched = request.POST['search']
+        found = FundRequestModel.objects.filter(name=searched)
+        pdb.set_trace()
+        return render(request, "charity/search.html", context={"found":found})
 
 class UpdateRequest(View):
     def get(self, request , id):
