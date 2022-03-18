@@ -87,13 +87,13 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'charity',
+        'NAME': 'd3eo3m22v44bac',
 
-        'USER': 'postgres',
+        'USER': 'tgiqzyoefreinv',
 
-        'PASSWORD': 'postgres',
+        'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
 
-        'HOST': 'localhost',
+        'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
 
         'PORT': '5432',
 
