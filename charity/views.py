@@ -1,3 +1,4 @@
+
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -11,7 +12,6 @@ from django.conf import settings
 from django.http.response import JsonResponse, HttpResponse
 from .forms import *
 from charity.tasks import *
-import pdfkit
 import os
 # from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
@@ -39,15 +39,20 @@ class RequestFund(View):
         phone = request.POST['phone']
         email = request.POST['email']
         description = request.POST['desc']
+        reason = request.POST['reasons']
         amount = request.POST['amount']
         organization = request.POST['org']
-        images = request.FILES.getlist('images')
         document = request.FILES['doc']
-        fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, amount=amount, organization_name=organization, document=document, current_user = request.user.id)
-        for image in images:
-            MultipleImage.objects.create(images=image, fund=fund_request)
-        messages.success(request, "Your request has been submitted and will be verified by admins.")
-        return redirect('requests')
+        images = request.FILES.getlist('images')
+        if(len(images)<= 2):
+            fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, reason=reason, amount=amount, organization_name=organization, document=document, current_user = request.user.id)
+            MultipleImage.objects.create(image1 = images[0],image2 = images[1], fund=fund_request)
+            messages.success(request, "Your request has been submitted and will be verified by admins.")
+            return redirect('requests')
+        else:
+            messages.error(request, "only 2 images are allowed to upload")
+            return redirect('fund_request')
+        
 
 class Requests(View):
     def get(self, request):
@@ -55,10 +60,8 @@ class Requests(View):
             return redirect('/login')
         else:
             fund_request_data = FundRequestModel.objects.all()
-            image = MultipleImage.objects.all()
-            # for fund_request in fund_request_data:
-            #     image = MultipleImage.objects.filter(fund=fund_request.id)
-            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":image})
+            images = MultipleImage.objects.all()
+            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":images})
     
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
@@ -192,8 +195,9 @@ class NgoRequestView(View):
 class Search(View):
     def post(self, request):
         searched = request.POST['search']
-        found = FundRequestModel.objects.filter(name=searched)
-        return render(request, "charity/search.html", context={"found":found})
+        found = FundRequestModel.objects.filter(reason__icontains=searched)
+        image = MultipleImage.objects.all()
+        return render(request, "charity/search.html", context={"found":found, "img":image})
 
 class UpdateRequest(View):
     def get(self, request , id):

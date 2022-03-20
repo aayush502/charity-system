@@ -7,8 +7,9 @@
     <div class="row text-center mt-4">
         <div class="col-md">
             {% for i in img %}
-                <a href="{{ i.images.url }}"><img src="{{i.images.url}}" class="img-fluid" alt="image"></a>
-            {% endfor %}
+                <a href="{{ i.image1.url }}"><img src="{{i.image1.url}}" class="img-fluid" alt="image"></a>
+                <a href="{{ i.image2.url }}"><img src="{{i.image2.url}}" class="img-fluid" alt="image"></a>
+                {% endfor %}
         </div>
     </div>
     <div class="row text-center mt-4">
@@ -48,6 +49,7 @@
             <p><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td></p>
         </div>
     </div>
+    
     <div class="row text-center mt-4">
         <div class="col-md-6">
             <p>Amount Recieved</p>
@@ -68,9 +70,15 @@
         <div class="col-md">
             <p><a href="{% url 'update' data.id %}" class="btn btn-outline-success" target="blank">Update</a></p>
         </div>
+        <div class="col-md-6">
+            <p>Reason</p>
+            <p>{{ data.reason }}</p>
+        </div>
+        {% if request.user.is_superuser %}
         <div class="col-md">
             <p><a href="{% url 'delete' data.id %}" class="btn btn-outline-danger" target="blank">Delete</a></p>
         </div>
+        {% endif %}
     </div>
     {% endif %}
     <div class="row text-center mt-4">

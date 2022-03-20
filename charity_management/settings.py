@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-@1bmp#b9+z7ln+gbr_m7=sq2kw4+!7v-@p(v9i6l!l=-ag5-he
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True 
 
-ALLOWED_HOSTS = ['charity-system.herokuapp.com' ]
+ALLOWED_HOSTS = ['localhost','charity-system.herokuapp.com' ]
 
 
 # Application definition
@@ -87,13 +87,13 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'd3eo3m22v44bac',
+        'NAME': 'charity',
 
-        'USER': 'tgiqzyoefreinv',
+        'USER': 'postgres',
 
-        'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
+        'PASSWORD': 'postgres',
 
-        'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
+        'HOST': 'localhost',
 
         'PORT': '5432',
 

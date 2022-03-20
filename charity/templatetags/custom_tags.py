@@ -15,6 +15,7 @@ def get_user(context):
 def to_int(value):
     return int(value)
 
-@register.filter()
-def one_image(value, *args,**kwargs):
+@register.simple_tag(takes_context=True)
+def set_breakpoint(context, *args):
+    vars = [arg for arg in locals()['args']]
     pdb.set_trace()

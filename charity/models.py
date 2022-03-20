@@ -1,3 +1,5 @@
+from distutils.command.upload import upload
+from statistics import mode
 from django.db import models
 from django_currentuser.middleware import get_current_authenticated_user, get_current_user
 
@@ -7,6 +9,7 @@ class FundRequestModel(models.Model):
     phone = models.BigIntegerField(blank=True, null=True)
     email = models.EmailField(blank=True)
     description = models.CharField(max_length=1000, null=False)
+    reason = models.CharField(max_length=50, null=True)
     amount = models.IntegerField(null=False, default=False)
     amount_recieved = models.BigIntegerField(null=True, default=0)
     organization_name = models.CharField(max_length=100, blank=True, null=True)
@@ -30,7 +33,8 @@ class FundRequestModel(models.Model):
 
 class MultipleImage(models.Model):
     fund = models.ForeignKey(FundRequestModel, on_delete=models.CASCADE)
-    images = models.ImageField(upload_to='images/')
+    image1 = models.ImageField(upload_to='images/', null=True)
+    image2 = models.ImageField(upload_to='images/', null=True)
 
 class NGO(models.Model):
     ngo_name = models.CharField(max_length=30,blank=True)

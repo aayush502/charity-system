@@ -17,18 +17,18 @@
     {% if d.amount|to_int != d.amount_recieved|to_int and d.amount|to_int > d.amount_recieved|to_int %}
     <div class="col-sm-4 mb-3">
       <a style="text-decoration: none; color: black;" href="{% url 'requests' d.id %}">
-        <div class="card" style="width: 18rem;">
+        <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 18rem;">
           {% for i in img %}
             {% if i.fund == d %}
-              <img src="{{i.images.url}}" class="card-img-top" alt="image">
+              <img src="{{ i.image1.url }}" class="card-img-top" alt="image">
             {% endif %}
           {% endfor %}
         <div class="card-body">
-          <h5 class="card-title">{{d.name}}</h5>
-          Email:<p class="card-text">{{d.email}}</p>
-          Amount:<p class="card-text">{{d.amount}}</p>
+          <h5 class="card-title text-success">{{d.reason}}</h5>
+          <p class="card-text text-success">Name:{{d.name}}</p>
+         <p class="card-text text-success"> Amount:{{d.amount}}</p>
           {% if d.verification_status is Null or d.verification_status is False%}
-          <h6>Status: Pending </h6>
+          <h6 class="card-text text-success">Status:Pending </h6>
           {% elif d.verification_status is True %}
           <h6>Status: Verified </h6>
           {% endif %}
@@ -58,8 +58,8 @@ $(document).ready(function() {
   // });
 });
 </script>
-{% endblock %}
 
+{% endblock %}
 
 
 

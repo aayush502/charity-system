@@ -36,7 +36,8 @@
             <td>
             {% for i in img %}
               {% if i.fund == d %}
-               <a href="{{ i.images.url }}" class="btn btn-outline-info" target="blank">Image</a>
+               <a href="{{ i.image1.url }}" class="btn btn-outline-info" target="blank">Image1</a>
+               <a href="{{ i.image2.url }}" class="btn btn-outline-info" target="blank">Image2</a>
               {% endif %}
             {% endfor %}
             </td>

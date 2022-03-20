@@ -1,19 +1,23 @@
 {% extends "charity/header.html" %}
 {% block content %}
-<div class="container">
-{% for f in found %}
-    <h1 class="text-center" style="color: blueviolet;">You searched for {{ f.name }}</h1>    
-    <div class="row">
+<div class="container mt-4 mb-4">
+  <h1 class="text-center" style="color: blueviolet;">Your search results</h1>    
+  <div class="row">
+      {% for f in found %}  
         <div class="col-sm-4 mb-3">
           <a style="text-decoration: none; color: black;" href="{% url 'requests' f.id %}">
-            <div class="card" style="width: 18rem;">
-                <img src="{{f.document.url}}" class="card-img-top" alt="image">
+            <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 18rem;">
+              {% for i in img %}
+                {% if i.fund == f %}
+                  <img src="{{i.image1.url}}" class="card-img-top" alt="image">
+                {% endif %}
+              {% endfor %}
             <div class="card-body">
-              <h5 class="card-title">{{f.name}}</h5>
-              Email:<p class="card-text">{{f.email}}</p>
-              Amount:<p class="card-text">{{f.amount}}</p>
+              <h5 class="card-title text-success">{{f.reason}}</h5>
+              <p class="card-text text-success">Name:{{f.name}}</p>
+              <p class="card-text text-success">Amount:{{f.amount}}</p>
               {% if f.verification_status is Null or f.verification_status is False%}
-              <h6>Status: Pending </h6>
+              <h6 class="card-text text-success">Status: Pending </h6>
               {% elif f.verification_status is True %}
               <h6>Status: Verified </h6>
               {% endif %}
@@ -26,7 +30,7 @@
         </div>
       </a>
     </div>
+    {% endfor %}
     </div>
-{% endfor %}
 </div>
 {% endblock content %}
