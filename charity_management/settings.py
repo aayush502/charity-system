@@ -87,13 +87,13 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'charity',
+        'NAME': 'd3eo3m22v44bac',
 
-        'USER': 'postgres',
+        'USER': 'tgiqzyoefreinv',
 
-        'PASSWORD': 'postgres',
+        'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
 
-        'HOST': 'localhost',
+        'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
 
         'PORT': '5432',
 
@@ -171,8 +171,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "testingdjango987@gmail.com"
 EMAIL_HOST_PASSWORD = "testing321@"
 
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+BROKER_URL = 'redis://:p60637d17478a45668e547b11a77f130de489d0f3f725942649a48742915face8@ec2-50-16-112-137.compute-1.amazonaws.com:26320'
+CELERY_RESULT_BACKEND = 'redis://:p60637d17478a45668e547b11a77f130de489d0f3f725942649a48742915face8@ec2-50-16-112-137.compute-1.amazonaws.com:26320'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
