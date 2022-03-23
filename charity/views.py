@@ -13,6 +13,9 @@ from django.http.response import JsonResponse, HttpResponse
 from .forms import *
 from charity.tasks import *
 import os
+import pdfkit
+from .process import html_to_pdf 
+
 # from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
 class HomeView(View):
@@ -44,13 +47,13 @@ class RequestFund(View):
         organization = request.POST['org']
         document = request.FILES['doc']
         images = request.FILES.getlist('images')
-        if(len(images)<= 2):
+        if(len(images)== 2):
             fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, reason=reason, amount=amount, organization_name=organization, document=document, current_user = request.user.id)
             MultipleImage.objects.create(image1 = images[0],image2 = images[1], fund=fund_request)
             messages.success(request, "Your request has been submitted and will be verified by admins.")
             return redirect('requests')
         else:
-            messages.error(request, "only 2 images are allowed to upload")
+            messages.error(request, "upload 2 images")
             return redirect('fund_request')
         
 
@@ -93,17 +96,25 @@ def charge(request, id):
         for requests in request_list:
             if(donor.donated_to == requests.id):
                 fund_list.append(requests)
-        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}', "donate.pdf")  
-        return render(request, "charity/success.html", context={"donor":donor, "reciever":fund_list[0]})
+        # return redirect("success")
+        
+        return render(request,"charity/success.html", context={"donor":donor, "reciever":fund_list[0]})
 
-# class GeneratePdf(View):
-#     def get(self, request, id):
-#         config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
-#         pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False,configuration=config)
-#         response = HttpResponse(pdf,content_type='application/pdf')
-#         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
-#         return response
-
+class GeneratePdf(View):
+    def get(self, request, id):
+        from django.template.loader import get_template, render_to_string
+        config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+        pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False, configuration= config)
+        # pdf = html_to_pdf('charity/success.html')
+        # return HttpResponse(pdf, content_type='application/pdf')
+        # config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False,configuration=config)
+        response = HttpResponse(pdf,content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
+        return response
+class SuccessPayment(View):
+    def get(self, request):
+        return render(request, "charity/success.html", context={})
 class khaltiView(View):
     def get(self, request):
         return render(request, "charity/khalti.html", context={})
@@ -120,14 +131,17 @@ class khaltiView(View):
 
 class AdminRequestView(View):
     def get(self, request):
-        data = FundRequestModel.objects.all()
-        image = MultipleImage.objects.all()
-        # a=[]
-        # for d in data:
-        #     for img in image:
-        #         if(img.fund==d.id):
-        #             a.append(img)
-        return render(request, "charity/admin-verify-request.html", context={"data":data,"img":image})
+        if 'user_id' not in request.session:
+            return redirect('/login')
+        else:
+            data = FundRequestModel.objects.all()
+            image = MultipleImage.objects.all()
+            # a=[]
+            # for d in data:
+            #     for img in image:
+            #         if(img.fund==d.id):
+            #             a.append(img)
+            return render(request, "charity/admin-verify-request.html", context={"data":data,"img":image})
 
 def verification_true(self,id):
     send_mail_true_task.delay(id)
@@ -196,8 +210,9 @@ class Search(View):
     def post(self, request):
         searched = request.POST['search']
         found = FundRequestModel.objects.filter(reason__icontains=searched)
+        fund_request_data = FundRequestModel.objects.all()
         image = MultipleImage.objects.all()
-        return render(request, "charity/search.html", context={"found":found, "img":image})
+        return render(request, "charity/search.html", context={"data":fund_request_data,"found":found, "img":image})
 
 class UpdateRequest(View):
     def get(self, request , id):

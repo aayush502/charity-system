@@ -25,12 +25,13 @@
           {% endfor %}
         <div class="card-body">
           <h5 class="card-title text-success">{{d.reason}}</h5>
-          <p class="card-text text-success">Name:{{d.name}}</p>
-         <p class="card-text text-success"> Amount:{{d.amount}}</p>
+          <p class="card-text text-success">Name:  {{d.name}}</p>
+          <p class="card-text text-success"> Amount:  {{d.amount}}</p>
+          <p class="card-text text-success"> Posted At:  {{d.postted_at}}</p>
           {% if d.verification_status is Null or d.verification_status is False%}
-          <h6 class="card-text text-success">Status:Pending </h6>
+          <h6 class="card-text text-success">Status:  Pending </h6>
           {% elif d.verification_status is True %}
-          <h6>Status: Verified </h6>
+          <h6 class="card-text text-success">Status: Verified </h6>
           {% endif %}
       </div>
       <div class="card-body">

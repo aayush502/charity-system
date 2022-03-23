@@ -33,7 +33,11 @@
         <p>Reciever Email</p>
         <p>{{ reciever.email }}</p>
     </div>
+    <div class="col-md">
+        <a href="{% url 'pdf' reciever.id%}">Pdf Download</a>
+    </div>
+    <div class="col-md">
+        <button class="btn btn-outline-primary btn-lg text-center" onclick="location.href='/'">Donate</button>
+    </div>
 </div>
-
-<a href="{% url 'home' %}">Go Back To Home</a>
 {% endblock %}

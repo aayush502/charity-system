@@ -2,7 +2,7 @@ from distutils.command.upload import upload
 from statistics import mode
 from django.db import models
 from django_currentuser.middleware import get_current_authenticated_user, get_current_user
-
+import datetime
 class FundRequestModel(models.Model):
     name = models.CharField(max_length=100, blank=True)
     address = models.CharField(max_length=100, blank=True)
@@ -15,9 +15,10 @@ class FundRequestModel(models.Model):
     organization_name = models.CharField(max_length=100, blank=True, null=True)
     document = models.FileField(upload_to= 'documents/')
     verification_status = models.BooleanField(null=True)
+    postted_at = models.DateField(default=datetime.date.today, null=True)
     current_user = models.CharField(default=get_current_user, blank=True, max_length=40)
     def __str__(self):
-        return self.name
+        return f"{self.reason} at {self.postted_at}"
 
     def verification_true(self):
         self.verification_status = True
