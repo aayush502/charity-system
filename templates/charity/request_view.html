@@ -1,25 +1,81 @@
 {% extends "charity/header.html" %}
 {% load custom_tags %}
 {% block content %}
+{% include 'messages.html' %}
 <div class="container">
-    <h1 class="text-center mt-4 text-primary"> Fund Request made by {{ data.name }} </h1>
+    <h1 class="text-center mt-4 text-primary"> {{ data.reason }} </h1>
     <hr style="width: 100%;">
     <div class="row text-center mt-4">
+            <div class="col-md-6">
+                <a href="{{ img.image1.url }}"><img src="{{img.image1.url}}" class="img-fluid" width="100%" height="50%" alt="image"></a>
+            </div>
+            <div class="col-md-6">    
+                <a href="{{ img.image2.url }}"><img src="{{img.image2.url}}" class="img-fluid" width="100%" height="350px" alt="image"></a>
+        </div>
+    </div>
+    
+    <div class="col-md text-center mt-4">
+        <p>Description:</p>
+        <p>{{ data.description }}</p>
+    </div>
+    <hr style="width: 100%;">
+    <div class="table-responsive mt-4">
+        <table class="table table-sm ">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Amount Requested</th>
+                <th>Amount Recieved</th>
+                <th>Document</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-primary">
+                <td>{{data.name}}</td>
+                <td>{{data.address}}</td>
+                <td>{{data.phone}}</td>
+                <td>{{data.email}}</td>
+                <td>Rs {{data.amount}}</td>
+                <td>Rs {{data.amount_recieved}}</td>
+                <td><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td>
+                <td>
+                    {% if data.current_user|to_int == request.user.id %}
+                    <a href="{% url 'update' data.id %}" class="btn btn-outline-success" target="blank">Update</a>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'delete' data.id %}" class="btn btn-outline-danger" target="blank">Delete</a>
+                    {% endif %}
+                </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    
+    <div class="row text-center mt-4">
         <div class="col-md">
-            {% for i in img %}
-                <a href="{{ i.image1.url }}"><img src="{{i.image1.url}}" class="img-fluid" alt="image"></a>
-                <a href="{{ i.image2.url }}"><img src="{{i.image2.url}}" class="img-fluid" alt="image"></a>
-                {% endfor %}
+            <p>People who donated {{ data.name }}</p>
+            {% for d in donor %}
+            <p>{{ d.name }} --> Rs {{ d.amount }}</p>
+            {% endfor %}
         </div>
     </div>
     <div class="row text-center mt-4">
-        <div class="col-md">
-            <p>Description:</p>
-            <p>{{ data.description }}</p>
+        <hr style="width: 100%;">
+        <div class="col text-center" style="margin-bottom: 100px;">
+            {% if data.verification_status %}
+            <a href="{% url 'charge' data.id %}" class="card-link btn btn-default btn-outline-info">Donate </a>
+            {% endif %}
+            
         </div>
-        
-    </div> 
-    <div class="row text-center mt-4">
+    </div>
+    {% endblock content %}
+    
+    
+    <!-- <div class="row text-center mt-4">
         <div class="col-md-6">
             <p>Name:</p>
             <p>{{ data.name }}</p>
@@ -80,22 +136,4 @@
         </div>
         {% endif %}
     </div>
-    {% endif %}
-    <div class="row text-center mt-4">
-        <div class="col-md">
-            <p>People who donated {{ data.name }}</p>
-            {% for d in donor %}
-            <p>{{ d.name }} --> Rs {{ d.amount }}</p>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row text-center mt-4">
-    <hr style="width: 100%;">
-    <div class="col text-center" style="margin-bottom: 100px;">
-        {% if data.verification_status %}
-        <a href="{% url 'charge' data.id %}" class="card-link btn btn-default btn-outline-info">Donate </a>
-        {% endif %}
-    </div>
-</div>
-{% endblock content %}
-
+    {% endif %} -->

@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-@1bmp#b9+z7ln+gbr_m7=sq2kw4+!7v-@p(v9i6l!l=-ag5-he
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True 
 
-ALLOWED_HOSTS = ['localhost','charity-system.herokuapp.com' ]
+ALLOWED_HOSTS = ['charity-system.herokuapp.com' ]
 
 
 # Application definition
@@ -82,44 +82,45 @@ WSGI_APPLICATION = 'charity_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-
-#     'default': {
-
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-#         'NAME': 'd3eo3m22v44bac',
-
-#         'USER': 'tgiqzyoefreinv',
-
-#         'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
-
-#         'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
-
-#         'PORT': '5432',
-
-#     }
-
-# }
 DATABASES = {
 
     'default': {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'charity',
+        'NAME': 'd3eo3m22v44bac',
 
-        'USER': 'postgres',
+        'USER': 'tgiqzyoefreinv',
 
-        'PASSWORD': 'postgres',
+        'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
 
-        'HOST': 'localhost',
+        'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
 
         'PORT': '5432',
 
     }
 
 }
+
+# DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': 'charity',
+
+#         'USER': 'postgres',
+
+#         'PASSWORD': 'root',
+
+#         'HOST': 'localhost',
+
+#         'PORT': '5432',
+
+#     }
+
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -190,10 +191,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "testingdjango987@gmail.com"
 EMAIL_HOST_PASSWORD = "testing321@"
 
-# BROKER_URL='redis://:p60637d17478a45668e547b11a77f130de489d0f3f725942649a48742915face8@ec2-50-16-112-137.compute-1.amazonaws.com:26320'
+CELERY_BROKER_URL='redis://:p60637d17478a45668e547b11a77f130de489d0f3f725942649a48742915face8@ec2-50-16-112-137.compute-1.amazonaws.com:26320'
 # CELERY_RESULT_BACKEND = 'redis://:p60637d17478a45668e547b11a77f130de489d0f3f725942649a48742915face8@ec2-50-16-112-137.compute-1.amazonaws.com:26320'
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

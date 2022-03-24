@@ -10,17 +10,17 @@
         <p>{{ donor.name }}</p>
     </div>
     <div class="col-sm-6">
-        <p>Amount</p>
-        <p>{{ donor.amount }}</p>
+        <p>Donated Amount</p>
+        <p>Rs {{ donor.amount }}</p>
     </div>
 </div>
 <div class="row text-center mt-4">
     <div class="col-sm-6">
         <p>Email</p>
-        <p>{{ donor.name }}</p>
+        <p>{{ donor.email }}</p>
     </div>
     <div class="col-sm-6">
-        <p>Donated Amount</p>
+        <p>Message</p>
         <p>{{ donor.message }}</p>
     </div>
 </div>
@@ -34,10 +34,8 @@
         <p>{{ reciever.email }}</p>
     </div>
     <div class="col-md">
-        <a href="{% url 'pdf' reciever.id%}">Pdf Download</a>
-    </div>
-    <div class="col-md">
-        <button class="btn btn-outline-primary btn-lg text-center" onclick="location.href='/'">Donate</button>
+            <a href="{% url 'pdf' donor.id%}">Pdf Download</a>
+        </form>
     </div>
 </div>
 {% endblock %}

@@ -1,7 +1,9 @@
 
+from email.mime import image
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
+from numpy import imag
 from user.models import NewUser
 from .models import *
 import pdb
@@ -62,9 +64,15 @@ class Requests(View):
         if 'user_id' not in request.session:
             return redirect('/login')
         else:
+            user = NewUser.objects.all()
             fund_request_data = FundRequestModel.objects.all()
+            fund = []
+            for u in user:
+                for f in fund_request_data:
+                    if(u.id == int(f.current_user) and u.is_ngo==False):
+                        fund.append(f)
             images = MultipleImage.objects.all()
-            return render(request, "charity/requests.html", context={"data":fund_request_data, "img":images})
+            return render(request, "charity/requests.html", context={"data":fund, "img":images})
     
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
@@ -97,14 +105,32 @@ def charge(request, id):
             if(donor.donated_to == requests.id):
                 fund_list.append(requests)
         # return redirect("success")
-        
-        return render(request,"charity/success.html", context={"donor":donor, "reciever":fund_list[0]})
+        context={ 
+            "donor":donor, 
+            "reciever":fund_list[0]
+            }
+        # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False, configuration= config)
+        return redirect('payment_success', id=donor.id)
+
+class Success(View):
+    def get(self, request, id):
+        donor =DonorList.objects.filter(id=id).first()
+        fund_model = FundRequestModel.objects.all()
+        fund_list = []
+        for requests in fund_model:
+            if(donor.donated_to == requests.id):
+                fund_list.append(requests)
+        context={ 
+            "donor":donor, 
+            "reciever":fund_list[0]
+            }
+        return render(request, "charity/success.html", context)
 
 class GeneratePdf(View):
-    def get(self, request, id):
-        from django.template.loader import get_template, render_to_string
-        config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
-        pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False, configuration= config)
+    def get(self, request,id):
+        config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False, configuration= config)
         # pdf = html_to_pdf('charity/success.html')
         # return HttpResponse(pdf, content_type='application/pdf')
         # config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
@@ -177,6 +203,8 @@ class NGOVerification(View):
 
 def ngo_verification_true(self,id):
     ngo_email_true_task.delay(id)
+    user = NewUser.objects.filter(id=id)
+    user.verification_true()
     return redirect('admin-verify-ngo')
 
 def ngo_verification_false(self, id):
@@ -186,7 +214,7 @@ def ngo_verification_false(self, id):
 class RequestsView(View):
     def get(self, request, pk):
         fund = FundRequestModel.objects.filter(id=pk).first()
-        image = MultipleImage.objects.filter(fund=pk)
+        image = MultipleImage.objects.filter(fund=pk).first()
         donor_list = DonorList.objects.all()
         # fund_request = FundRequestModel.objects.all()
         lists = []
@@ -197,14 +225,15 @@ class RequestsView(View):
 
 class NgoRequestView(View):
     def get(self, request):
-        ngo_data = NGO.objects.all()
+        user = NewUser.objects.all()
         fund_request_data = FundRequestModel.objects.all()
-        a = []
-        for data in ngo_data:
-            for fund_data in fund_request_data:
-                if(data.current_user == fund_data.current_user):
-                    a.append(fund_data)        
-        return render(request, "charity/ngo_request.html", context={"data":a})
+        fund = []
+        for u in user:
+            for f in fund_request_data:
+                if(u.id == int(f.current_user) and u.is_ngo==True):
+                    fund.append(f)
+            images = MultipleImage.objects.all()        
+        return render(request, "charity/ngo_request.html", context={"data":fund, "img": images})
 
 class Search(View):
     def post(self, request):
@@ -222,27 +251,30 @@ class UpdateRequest(View):
     
     def post(self, request, id):
         fund_request = FundRequestModel.objects.get(id=id)
-        # fund_images = MultipleImage.objects.filter(fund=fund_request)
-        if len(request.FILES)!=0:
-            if len(fund_request.document) > 0:
-                os.remove(fund_request.document.path)
-            fund_request.document = request.FILES.get('doc')
-        # if len(request.FILES.getlist('images')) != 0:
-        #     for f in fund_images:
-        #         os.remove(f.images.path)
-        #         get_images = request.FILES.getlist('images')
-        #         for image in get_images:
-        #             f.images = image
-        #     fund_images.update()
+        fund_images = MultipleImage.objects.filter(fund=fund_request)
+        if request.FILES.get('doc'):
+            if len(request.FILES.get('doc'))!=0:
+                if len(fund_request.document) > 0:
+                    os.remove(fund_request.document.path)
+                fund_request.document = request.FILES.get('doc')
+        if len(request.FILES.getlist('images')) != 0:
+            if len(fund_images[0].image1 and fund_images[0].image2) > 0:
+                os.remove(fund_images[0].image1.path)
+                os.remove(fund_images[0].image2.path)
+            get_images = request.FILES.getlist('images')
+            img = fund_images[0]
+            img.image1=get_images[0]
+            img.image2=get_images[1]
+            img.save()
         fund_request.name = request.POST['name']
         fund_request.address = request.POST['address']
         fund_request.phone = request.POST['phone']
         fund_request.email = request.POST['email']
         fund_request.description = request.POST['desc']
-        fund_request.amount = request.POST['amount']
         fund_request.organization = request.POST['org']
         fund_request.save()
-        return redirect('home')
+        messages.success(request, "Updated Succesfully")
+        return redirect(f'requests',pk=fund_request.id)
 
 def delete(request, id):
     if request.method == "GET":
