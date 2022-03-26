@@ -37,51 +37,55 @@
           Home
         </a>
       </li>
+     <li class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Discover 
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
+        <li><a href="/fund_request" class="dropdown-item">Request For Fund</a></li>
+        <li><a href="/ngo" class="dropdown-item">Register NGO</a></li>
+        <li><a href="/pending-requests" class="dropdown-item">Pending Requests</a></li>
+      </ul>
+      </li>
+      <li class="nav-item active">
+        <a href="#" class="nav-link">
+          Testimonials
+        </a>
+      </li>     
+      {% if 'user_id' in request.session%}
+      {% if request.user.is_superuser %}
+      <li class="nav-item">
+        <a href="/admin-verify-request" class="nav-link">
+          Admin
+        </a>
+      </li>
+      {% endif %}
       <li class="nav-item">
         <a href="/about" class="nav-link">
           About Us
         </a>
       </li>
-      <li class="nav-item dropdown">
-         <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" 
-         data-bs-toggle="dropdown" aria-expanded="false">
-           Discover 
-         </a>
-         <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> 
-         <li><a href="/fund_request" class="dropdown-item">Request For Fund</a></li>
-         <li><a href="/requests" class="dropdown-item">Requests Made</a></li>
-         <li><a href="/ngo" class="dropdown-item">Register NGO</a></li>
-         </ul>
-       </li>
-      
-      {% if 'user_id' in request.session%}
-      {% if request.user.is_superuser %}
-      <li class="nav-item">
-         <a href="/admin-verify-request" class="nav-link">
-           Admin
-         </a>
-       </li>
-       {% endif %}
       <li class="nav-item">
         <a href="/logout" class="nav-link">
           Logout 
         </a>
+        </li>
         {% else %}
         <li class="nav-item">
          <a href="/login" class="nav-link">
            Login
          </a>
-       </li>
+        </li>
        <li class="nav-item">
          <a href="/register" class="nav-link">
            Sign Up 
-         </a>
+          </a>
        </li>
         {% endif %}
       </li>
       <form action="{% url 'search' %}" method="post" class="d-flex">
         {% csrf_token %}
-        <input type="text" name="search" class="form-control me-2">
+        <input type="text" name="search" id="searchbox" class="form-control me-2">
         <button type="submit" class="btn-primary">
           Search
         </button>
@@ -94,21 +98,47 @@
 
 <footer class="text-center fixed-bottom text-white bg-dark" style="height: 60px;">
    <div class="text-center pt-2" style="background-color: rgba(0, 0, 0, 0.2);">
-     © 2021 Copyright:
-     <a class="text-white text-decoration-none" href="">Online Charity System</a>
+    © 2021 Copyright:
+    <a class="text-white text-decoration-none" href="">Online Charity System</a>
      <a class="btn btn-outline-success btn-floating m-1" href="https://www.facebook.com/aayush.humagain.3382/" role="button">
-      <i class="fab fa-facebook-f"></i>
+       <i class="fab fa-facebook-f"></i>
       </a>
       <a class="btn btn-outline-success btn-floating m-1" href="https://www.linkedin.com/in/aayush-humagain-067788200/" role="button">
         <i class="fab fa-linkedin-in"></i>
        </a>
        <a class="btn btn-outline-success btn-floating m-1" href="https://github.com/aayush502" role="button">
         <i class="fab fa-github"></i>
-       </a>
-   </div>
+      </a>
+    </div>
  </footer>
 </body>
+<script>
+$('#searchbox').keyup(function (){
+    $('.col-sm-4').removeClass('d-none');
+    var filter = $(this).val();
+    if (filter && filter.length>0){
+      $('.row').find('.col-sm-4 .card-body h5:not(:contains("'+filter+'"))').parentsUntil('.col-sm-4').parent().addClass('d-none');
+    }
+});
+</script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <script src="{% static 'js/select2.min.js' %}"></script>
 </html>
 
+
+
+        <!-- <li class="nav-item">
+          <a href="/pending-requests" class="nav-link">
+            Pending Requests
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/fund_request" class="nav-link">
+            Request Fund
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/ngo" class="nav-link">
+            Register NGO
+          </a>
+        </li> -->

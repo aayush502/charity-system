@@ -6,11 +6,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import re_path, url
 urlpatterns = [
-    path('',HomeView.as_view(), name='home'),
+    path('',Requests.as_view(), name='home'),
     path('about', AboutView.as_view(), name="about"),
     url(r'^fund_request/$', RequestFund.as_view(), name="fund_request"),
-    path('requests', Requests.as_view(), name="requests"),
-    path('charge/<int:id>', charge, name="charge"),
+    path('pending-requests', PendingRequest.as_view(), name="pending-requests"),
+    path('charge/<int:id>', charge, name='charge'),
     path('ngo', NGOView.as_view(), name="ngo"), 
     path('ngo-request', NgoRequestView.as_view(), name="ngo-request"),
     path("success", SuccessPayment.as_view(), name="success"),

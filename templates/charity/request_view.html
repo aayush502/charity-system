@@ -30,7 +30,9 @@
                 <th>Amount Requested</th>
                 <th>Amount Recieved</th>
                 <th>Document</th>
-                <th>Actions</th>
+                {% if data.current_user|to_int == request.user.id %}
+                    <th>Actions</th>
+                {% endif %}
                 </tr>
             </thead>
             <tbody>

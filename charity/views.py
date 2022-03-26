@@ -20,12 +20,12 @@ from .process import html_to_pdf
 
 # from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
-class HomeView(View):
-    def get(self, request):
-        # if 'user_id' not in request.session:
-        #     return redirect('/login')
-        # else:
-        return render(request, "charity/home.html", context={})
+# class HomeView(View):
+    # def get(self, request):
+    #     # if 'user_id' not in request.session:
+    #     #     return redirect('/login')
+    #     # else:
+    #     return render(request, "charity/home.html", context={})
 class AboutView(View):
     def get(self, request):
         return render(request, "charity/about.html", context={})
@@ -53,11 +53,10 @@ class RequestFund(View):
             fund_request=FundRequestModel.objects.create(name=name, address=address, phone=phone, email=email, description=description, reason=reason, amount=amount, organization_name=organization, document=document, current_user = request.user.id)
             MultipleImage.objects.create(image1 = images[0],image2 = images[1], fund=fund_request)
             messages.success(request, "Your request has been submitted and will be verified by admins.")
-            return redirect('requests')
+            return redirect('/')
         else:
             messages.error(request, "upload 2 images")
-            return redirect('fund_request')
-        
+            return redirect('fund_request')    
 
 class Requests(View):
     def get(self, request):
@@ -65,15 +64,42 @@ class Requests(View):
             return redirect('/login')
         else:
             user = NewUser.objects.all()
-            fund_request_data = FundRequestModel.objects.all()
+            fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
             fund = []
             for u in user:
                 for f in fund_request_data:
-                    if(u.id == int(f.current_user) and u.is_ngo==False):
+                    if(u.id == int(f.current_user) and u.is_ngo==False and f.verification_status==True):
+                        fund.append(f)
+            images = MultipleImage.objects.all()   
+            return render(request, "charity/home.html", context={"data":fund, "img":images})
+
+class NgoRequestView(View):
+    def get(self, request):
+        user = NewUser.objects.all()
+        fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
+        fund = []
+        for u in user:
+            for f in fund_request_data:
+                if(u.id == int(f.current_user) and u.is_ngo==True and f.verification_status==True):
+                    fund.append(f)
+            images = MultipleImage.objects.all()        
+        return render(request, "charity/ngo_request.html", context={"data":fund, "img": images})
+
+class PendingRequest(View):
+    def get(self, request):
+        if 'user_id' not in request.session:
+            return redirect('/login')
+        else:
+            user = NewUser.objects.all()
+            fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
+            fund = []
+            for u in user:
+                for f in fund_request_data:
+                    if(u.id == int(f.current_user) and f.verification_status==None):
                         fund.append(f)
             images = MultipleImage.objects.all()
-            return render(request, "charity/requests.html", context={"data":fund, "img":images})
-    
+            return render(request, "charity/pending-requests.html", context={"data":fund, "img":images})
+
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
     if request.method == "GET":
@@ -223,18 +249,6 @@ class RequestsView(View):
                 lists.append(donor)
         return render(request, "charity/request_view.html", context={"data":fund, "donor":lists, "img":image})
 
-class NgoRequestView(View):
-    def get(self, request):
-        user = NewUser.objects.all()
-        fund_request_data = FundRequestModel.objects.all()
-        fund = []
-        for u in user:
-            for f in fund_request_data:
-                if(u.id == int(f.current_user) and u.is_ngo==True):
-                    fund.append(f)
-            images = MultipleImage.objects.all()        
-        return render(request, "charity/ngo_request.html", context={"data":fund, "img": images})
-
 class Search(View):
     def post(self, request):
         searched = request.POST['search']
@@ -286,4 +300,4 @@ def delete(request, id):
         fund_request.delete()
         for img in images:
             img.delete()
-        return redirect('requests')
+        return redirect('/')

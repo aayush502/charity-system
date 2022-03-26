@@ -4,20 +4,13 @@
 {% load custom_tags %}
 {% include 'messages.html' %}
 <div class="container mt-5 mb-5">
-  <div class="col" style="margin-bottom: 20px;">
-   Category 
-  <select class="js-example-basic-single" id="cat" style="width: 80px;" onchange="location=this.value;">
-    <option value="">Select an option</option>
-    <option value="requests"> User </option>
-    <option value="ngo-request"> NGO </option>
-  </select>
-  </div>
+  
   <div class="row">
     {% for d in data %}
     {% if d.amount|to_int != d.amount_recieved|to_int and d.amount|to_int > d.amount_recieved|to_int %}
-    <div class="col-sm-4 mb-3">
+    <div class="col-sm-4 mb-3" id="reasons">
       <a style="text-decoration: none; color: black;" href="{% url 'requests' d.id %}">
-        <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 18rem;">
+        <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 21rem;">
           {% for i in img %}
             {% if i.fund == d %}
               <img src="{{ i.image1.url }}" class="card-img-top" alt="image">
@@ -61,25 +54,3 @@ $(document).ready(function() {
 </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

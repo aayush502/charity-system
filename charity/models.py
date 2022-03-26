@@ -14,7 +14,7 @@ class FundRequestModel(models.Model):
     amount_recieved = models.BigIntegerField(null=True, default=0)
     organization_name = models.CharField(max_length=100, blank=True, null=True)
     document = models.FileField(upload_to= 'documents/')
-    verification_status = models.BooleanField(null=True)
+    verification_status = models.BooleanField(default=None, null=True)
     postted_at = models.DateField(default=datetime.date.today, null=True)
     current_user = models.CharField(default=get_current_user, blank=True, max_length=40)
     def __str__(self):

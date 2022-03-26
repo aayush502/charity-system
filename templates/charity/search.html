@@ -24,7 +24,7 @@
           </div>
           <div class="card-body">
             {% if f.verification_status is True %}
-            <a href="{% url 'charge' d.id %}" class="card-link btn btn-outline-info">Donate </a>
+            <a href="{% url 'charge' f.id %}" class="card-link btn btn-outline-info">Donate </a>
             {% endif %}
           </div>
         </div>
