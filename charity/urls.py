@@ -27,4 +27,6 @@ urlpatterns = [
     path('search',Search.as_view(), name="search"),
     path('update/<id>', UpdateRequest.as_view(), name="update"),
     path('delete/<id>', delete, name="delete"),
+    path('testimonials', Testimonials.as_view(), name="testimonials"),
+    path('create-testimonials', PostTestimonial.as_view(), name="create-testimonials"),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

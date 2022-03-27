@@ -1,5 +1,6 @@
 
 from email.mime import image
+from urllib import request
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -17,6 +18,7 @@ from charity.tasks import *
 import os
 import pdfkit
 from .process import html_to_pdf 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # from .pdfconverter import html_to_pdf
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
@@ -301,3 +303,33 @@ def delete(request, id):
         for img in images:
             img.delete()
         return redirect('/')
+
+class Testimonials(View):
+    def get(self, request):
+        donor = DonorList.objects.filter(email=request.user.email)
+        data = Testimonial.objects.all()
+        page = request.GET.get('page', 1)
+        paginator = Paginator(data, 3)
+        try:
+            data_list = paginator.page(page)
+        except PageNotAnInteger:
+            data_list = paginator.page(1)
+        except EmptyPage:
+            data_list = paginator.page(paginator.num_pages)
+        return render(request, "charity/testimonials.html", context={"data":data_list, "donor":donor})
+
+class PostTestimonial(View):
+    def get(self, request):
+        data = Testimonial.objects.all()
+        return render(request, "charity/testimonial-form.html", context={})
+    
+    def post(self, request):
+        name = request.POST['name']
+        profession = request.POST['profession']
+        review_message = request.POST['desc']
+        donated_to = request.POST['reasons']
+        image = request.FILES['image']
+        Testimonial.objects.create(name=name, profession=profession,review_message=review_message, donated_to=donated_to, image=image)
+        return redirect('testimonials')
+
+    

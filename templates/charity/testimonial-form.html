@@ -1,0 +1,44 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<div class="container pt-5 pb-5">
+    <p>* is the required field</p>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<div class="row">
+    <div class="col">
+        <label class="form-label" for="name">Name *</label>
+        <input type="text" class="form-control" name="name" required />
+    </div>
+    <div class="col">
+        <label class="form-label" for="profession">Profession</label>
+        <input type="text" class="form-control" name="profession"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <label class="form-label" for="name">Image *</label>
+        <input type="file" class="form-control" name="image" accept="image/*" required />
+    </div>
+    <div class="col">
+        <label class="form-label" for="reasons">Donated To</label><br>
+            <select name="reasons" id="reasons">
+                <option value="Fund raising for corona">Fund raising for corona virus</option>
+                <option value="Fund raising for corona">Fund raising for natural disaster</option>
+                <option value="Fund raising for fire accident">Fund raising for fire accident</option>
+                <option value="Fund raising for treatment">Fund raising for treatment</option>
+                <option value="Fund raising for educational purpose">Fund raising for educational purpose</option>
+            </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <label class="form-label" for="description">Review Message *</label>
+        <textarea name="desc" rows="5" class="form-control" required></textarea>
+    </div>
+</div>
+<div class="text-center mt-3">
+    <button type="submit" class="btn btn-outline-dark">Submit</button>
+</div>
+</form>
+</div>
+{% endblock content %}

@@ -1,46 +1,54 @@
 {% extends "charity/header.html" %}
 {% block content %}
-
-<div class="containers">
-    <h1>About Us</h1>
-    <hr>
-    <h2>Have any questions? We'd love to hear from you</h2>
-    <div class="container-items">
-        <div class="fund-raising">
-            <h3>Fund Raising</h3>
-            <p>We collect fund for the specific person or ngo
-                without any charges. So that they can fix their financial
-                problems.
-            </p>
-            <a href="requests"><button id="f-raise"> Donate </button></a>
-        </div>
-        <div class="write-us">
-            <h3>Write Us</h3>
-            <p> You can write us if you have any queries</p>
-            <a href="#"> <button id="write">Write</button></a>
-        </div>
-        <div class="our-plans">
-            <h3> NGO </h3>
-            <p>we register NGO in this website where 
-                they will get benifit that they deserve.
-            </p>
-            <a href="ngo"><button id="contact">Register Ngo</button></a>
-        </div>
-        <div class="container2">
-        <h2>Write Us</h2>
-        <form action="" id="form">
-            <input type="email" name="email" id="email" placeholder="Enter your email">
-            <input type="text" name="name" id="name" placeholder=" enter your name">
-            <textarea name="message" id="message" cols="30" rows="10" placeholder="Enter your message here"></textarea>
-            <input type="submit" value="Send" id="submit">
-        </form>
-        </div>
-    </div>
-
-
-
-
+<div class="container">
+<div class="row">
+<div class="about-section">
+    <h1>Charity Management System</h1>
+    <p>This system is built with the purpose of helping <br>
+         the people and NGO for fund raising process</p>
 </div>
-
-
+  
+  <h2 style="text-align:center">Our Team</h2>
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <img src="/static/img/aayush.jpg" alt="Jane" style="width:100%">
+        <div class="container">
+          <h2>Aayush Humagain</h2>
+          <p class="title">Backend and Database</p>
+          <p>I contributed in backend and database portion like building queries, celery etc</p>
+          <p>aayushhumagain23@gmail.com</p>
+          <p><button class="button">Contact</button></p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="column">
+      <div class="card">
+        <img src="/static/img/samir.jpg" alt="Mike" style="width:100%">
+        <div class="container">
+          <h2>Samir Karki</h2>
+          <p class="title">Frontend</p>
+          <p>I designed most of the pages of charity system using html, css, bootstrap and javascript</p>
+          <p>samirkarki5@gmail.com</p>
+          <p><button class="button">Contact</button></p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="column">
+      <div class="card">
+        <img src="/static/img/theraj.jpg" alt="John" style="width:100%">
+        <div class="container">
+          <h2>Rajendra Karki</h2>
+          <p class="title">Backend</p>
+          <p>I contributed in charity management system in the backend portion</p>
+          <p>rajendrakarki@gmail.com</p>
+          <p><button class="button">Contact</button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 {% endblock content %}

@@ -70,3 +70,13 @@ class DonorList(models.Model):
     message = models.CharField(max_length=1000, blank=True)
     donated_to = models.IntegerField(blank=True)
     current_user = models.BigIntegerField(blank=True)
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=50)
+    review_message = models.CharField(max_length=1000)
+    profession = models.CharField(max_length=50, blank=True)
+    image = models.ImageField(upload_to='testimonials_pic/')
+    donated_to = models.CharField(max_length=100, blank=True)
+    verification_status = models.BooleanField(default=None,null=True)
+    def __str__(self):
+        return self.name

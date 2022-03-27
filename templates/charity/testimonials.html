@@ -1,0 +1,47 @@
+{% extends "charity/header.html" %}
+{% block content %}
+<div class="container">
+{% if donor %}
+<a class="btn btn-outline-dark bg-gradient text-center mt-3" href="/create-testimonials">Post Testimonial</a>
+{% endif %}
+<h3 class="text-center">Here is what our donors say!!</h3>
+<div class="wrapper">
+  {% for d in data %}
+    <div class="box ">
+      <i class="fas fa-quote-left quote"></i>
+      <p>{{d.review_message}}</p>
+      <div class="content">
+        <div class="info">
+          <div class="name">{{d.name}}</div>
+          <div class="job">Profession | {{d.profession}}</div>
+        </div>
+        <div class="image">
+          <img src="{{d.image.url}}" alt="image">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% if data.has_other_pages %}
+    <ul class="pagination mt-3 text-center">
+    {% if data.has_previous %}
+      <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in data.paginator.page_range %}
+      {% if data.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if data.has_next %}
+      <li><a href="?page={{ data.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+{% endblock content %}
