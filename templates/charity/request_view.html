@@ -69,73 +69,59 @@
         <hr style="width: 100%;">
         <div class="col text-center" style="margin-bottom: 100px;">
             {% if data.verification_status %}
-            <a href="{% url 'charge' data.id %}" class="card-link btn btn-default btn-outline-info">Donate </a>
+            <a href="{% url 'charge' data.id %}" class="card-link btn btn-outline-dark">Donate with marstercard</a>
+            
+            <button class="btn btn-outline-dark" id="payment-button">Donate with Khalti</button>
             {% endif %}
             
         </div>
     </div>
+    <script>
+        function verifyPayment(payload){
+            $.ajax({
+                url: "{% url 'verify-khalti-payment' data.id %}",
+                type: "POST",
+                data: payload,
+                dataType: 'json',
+                success: function (response) {alert (response)},
+                error: function (error) {alert (error.responseJSON['message']) }
+            });
+        }
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_2f846ee2f565452687aaeaa1d51144df",
+            "productIdentity": "1234567890",
+            "productName": "Dragon",
+            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+                ],
+            "eventHandler": {
+                onSuccess (payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload);
+                    verifyPayment(payload);
+                    // window.location.replace("https://khalti.com/api/v2/merchant-transaction/");
+                },
+                onError (error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: 1000});
+        }
+    </script>
     {% endblock content %}
     
-    
-    <!-- <div class="row text-center mt-4">
-        <div class="col-md-6">
-            <p>Name:</p>
-            <p>{{ data.name }}</p>
-        </div>
-        <div class="col-md-6">
-            <p>Address</p>
-            <p>{{ data.address }}</p>
-        </div>
-    </div> 
-    <div class="row text-center mt-4">
-        <div class="col-md-6">
-            <p>Contact No.</p>
-            <p>{{ data.phone }}</p>
-        </div>
-        <div class="col-md-6">
-            <p>Email</p>
-            <p>{{ data.email }}</p>
-        </div>
-    </div>
-    <div class="row text-center mt-4">
-        <div class="col-md-6">
-            <p>Amount</p>
-            <p>Rs {{ data.amount }}</p>
-        </div>
-        <div class="col-md-6">
-            <p>Document Uploaded</p>
-            <p><a href="{{ data.document.url }}" class="btn btn-outline-info" target="blank">Document</a></td></p>
-        </div>
-    </div>
-    
-    <div class="row text-center mt-4">
-        <div class="col-md-6">
-            <p>Amount Recieved</p>
-            <p>Rs {{ data.amount_recieved }}</p>
-        </div>
-        <div class="col-md-6">
-            <p>Organization Name</p>
-            {% if data.organization_name %}
-                <p>{{ data.organization_name}}</p>
-            {% else %}
-                <p> None </p>
-            {% endif %}
-        </div>
-    </div>
-    {% if data.current_user|to_int == request.user.id %}
-    <p class="text-center">Operations</p>
-    <div class="row text-center mt-4">
-        <div class="col-md">
-            <p><a href="{% url 'update' data.id %}" class="btn btn-outline-success" target="blank">Update</a></p>
-        </div>
-        <div class="col-md-6">
-            <p>Reason</p>
-            <p>{{ data.reason }}</p>
-        </div>
-        {% if request.user.is_superuser %}
-        <div class="col-md">
-            <p><a href="{% url 'delete' data.id %}" class="btn btn-outline-danger" target="blank">Delete</a></p>
-        </div>
-        {% endif %}
-    </div>
-    {% endif %} -->

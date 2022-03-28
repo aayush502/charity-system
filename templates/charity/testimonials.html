@@ -23,7 +23,7 @@
     {% endfor %}
     </div>
     {% if data.has_other_pages %}
-    <ul class="pagination mt-3 text-center">
+    <ul class="pagination" style="margin-bottom: 60px;" >
     {% if data.has_previous %}
       <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
     {% else %}

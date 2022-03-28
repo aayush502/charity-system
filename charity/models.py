@@ -18,7 +18,7 @@ class FundRequestModel(models.Model):
     postted_at = models.DateField(default=datetime.date.today, null=True)
     current_user = models.CharField(default=get_current_user, blank=True, max_length=40)
     def __str__(self):
-        return f"{self.reason} at {self.postted_at}"
+        return f"{self.name} at {self.postted_at}"
 
     def verification_true(self):
         self.verification_status = True
@@ -80,3 +80,10 @@ class Testimonial(models.Model):
     verification_status = models.BooleanField(default=None,null=True)
     def __str__(self):
         return self.name
+    def verification_true(self):
+        self.verification_status=True        
+        self.save()
+
+    def verification_false(self):
+        self.verification_status = False
+        self.save()

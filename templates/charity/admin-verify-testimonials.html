@@ -14,13 +14,10 @@
         <tr>
             <th>SN</th>
             <th>Name</th>
-            <th>Address</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Description</th>
-            <th>Amount</th>
+            <th>Profession</th>
+            <th>Review Message</th>
+            <th>Donated to</th>
             <th>Image</th>
-            <th>Document</th>
             <th>Verify (Y/N) ?</th>
         </tr>
     </thead>
@@ -29,24 +26,14 @@
           {% for d in data %}
             <td>{{forloop.counter}}</td>
             <td>{{d.name}}</td>
-            <td>{{d.address}}</td>
-            <td>{{d.phone}}</td>
-            <td>{{d.email}}</td>
-            <td>{{d.description}}</td>
-            <td>{{d.amount}}</td>
-            <td>
-            {% for i in img %}
-              {% if i.fund == d %}
-               <a href="{{ i.image1.url }}" class="btn btn-outline-dark" target="blank">Image1</a>
-               <a href="{{ i.image2.url }}" class="btn btn-outline-dark" target="blank">Image2</a>
-              {% endif %}
-            {% endfor %}
-            </td>
-            <td><a href="{{ d.document.url }}" class="btn btn-outline-dark" target="blank">Document</a></td>
+            <td>{{d.profession}}</td>
+            <td>{{d.review_message}}</td>
+            <td>{{d.donated_to}}</td>
+            <td><a href="{{ d.image.url }}" class="btn btn-outline-dark" target="blank">Profile</a></td>
             <td>
               {% if d.verification_status is None %}
-                  <a href="{% url 'request_verified_as_true' d.id %}" class="mr-2 ml-2"><button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button></a>
-                  <a href="{% url 'request_verified_as_false' d.id %}"><button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button></a>
+                  <a href="{% url 'testimonial_verified_as_true' d.id %}" class="mr-2 ml-2"><button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button></a>
+                  <a href="{% url 'testimonial_verified_as_false' d.id %}"><button class="btn btn-outline-danger"><i class="fas fa-times-circle"></i></button></a>
               {% elif d.verification_status is True %}
                   <button class="btn btn-outline-success"><i class="fas fa-check-square"></i></button>
               {% elif d.verification_status is False %}

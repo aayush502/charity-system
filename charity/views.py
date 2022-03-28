@@ -1,16 +1,13 @@
 
-from email.mime import image
-from urllib import request
+from math import fabs
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-from numpy import imag
 from user.models import NewUser
 from .models import *
 import pdb
 import stripe
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from django.conf import settings
 from django.http.response import JsonResponse, HttpResponse
 from .forms import *
@@ -19,15 +16,11 @@ import os
 import pdfkit
 from .process import html_to_pdf 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-# from .pdfconverter import html_to_pdf
+import requests
+from django.views.decorators.csrf import csrf_exempt
+import json
 stripe.api_key = "sk_test_51JtRchSEz4lBqp0qwWE1jwZzVB39QlTrZFfiNTx0duNpox7TMO2SkpkjWVncXJz3BRSHxx7DFxdpxdX2Lai7t8RA00RKYenJJk"
-# class HomeView(View):
-    # def get(self, request):
-    #     # if 'user_id' not in request.session:
-    #     #     return redirect('/login')
-    #     # else:
-    #     return render(request, "charity/home.html", context={})
+
 class AboutView(View):
     def get(self, request):
         return render(request, "charity/about.html", context={})
@@ -60,32 +53,62 @@ class RequestFund(View):
             messages.error(request, "upload 2 images")
             return redirect('fund_request')    
 
+def bubble_sort(arr):
+    number=len(arr)
+    for i in range(number-1):
+        for j in range(0, number-i-1):
+            if arr[j] < arr[j+1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    final_fund = list(dict.fromkeys(arr))
+    return final_fund
+
 class Requests(View):
     def get(self, request):
         if 'user_id' not in request.session:
             return redirect('/login')
         else:
             user = NewUser.objects.all()
-            fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
-            fund = []
+            fund_request = FundRequestModel.objects.all()
+            data = []
             for u in user:
-                for f in fund_request_data:
+                for f in fund_request:
                     if(u.id == int(f.current_user) and u.is_ngo==False and f.verification_status==True):
-                        fund.append(f)
-            images = MultipleImage.objects.all()   
-            return render(request, "charity/home.html", context={"data":fund, "img":images})
+                        data.append(f)
+            arr=[]
+            for f in data:
+                arr.append(f.amount)
+            fund_array = bubble_sort(arr)
+            fund_data=[]
+            for a in fund_array:
+                for f in data:
+                    if a==f.amount:
+                        fund_data.append(f)
+            images = MultipleImage.objects.all()  
+            return render(request, "charity/home.html", context={"data":fund_data, "img":images})
 
 class NgoRequestView(View):
     def get(self, request):
-        user = NewUser.objects.all()
-        fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
-        fund = []
-        for u in user:
-            for f in fund_request_data:
-                if(u.id == int(f.current_user) and u.is_ngo==True and f.verification_status==True):
-                    fund.append(f)
-            images = MultipleImage.objects.all()        
-        return render(request, "charity/ngo_request.html", context={"data":fund, "img": images})
+        if 'user_id' not in request.session:
+            return redirect('/login')
+        else:
+            user = NewUser.objects.all()
+            fund_request = FundRequestModel.objects.all()
+            data = []
+            for u in user:
+                for f in fund_request:
+                    if(u.id == int(f.current_user) and u.is_ngo==True and f.verification_status==True):
+                        data.append(f)
+            arr=[]
+            for f in data:
+                arr.append(f.amount)
+            fund_array= bubble_sort(arr)
+            fund_data=[]
+            for a in fund_array:
+                for f in data:
+                    if int(a)==f.amount:
+                        fund_data.append(f)
+            images = MultipleImage.objects.all()
+            return render(request, "charity/ngo_request.html", context={"data":fund_data, "img": images})
 
 class PendingRequest(View):
     def get(self, request):
@@ -93,14 +116,23 @@ class PendingRequest(View):
             return redirect('/login')
         else:
             user = NewUser.objects.all()
-            fund_request_data = FundRequestModel.objects.all().order_by("postted_at")
-            fund = []
+            fund_request = FundRequestModel.objects.all()
+            data = []
             for u in user:
-                for f in fund_request_data:
+                for f in fund_request:
                     if(u.id == int(f.current_user) and f.verification_status==None):
-                        fund.append(f)
+                        data.append(f)
+            arr=[]
+            for f in data:
+                arr.append(f.amount)
+            fund_array= bubble_sort(arr)
+            fund_data=[]
+            for a in fund_array:
+                for f in data:
+                    if int(a)==f.amount:
+                        fund_data.append(f)
             images = MultipleImage.objects.all()
-            return render(request, "charity/pending-requests.html", context={"data":fund, "img":images})
+            return render(request, "charity/pending-requests.html", context={"data":fund_data, "img":images})
 
 def charge(request, id):
     user = FundRequestModel.objects.get(id=id)
@@ -132,13 +164,10 @@ def charge(request, id):
         for requests in request_list:
             if(donor.donated_to == requests.id):
                 fund_list.append(requests)
-        # return redirect("success")
         context={ 
             "donor":donor, 
             "reciever":fund_list[0]
             }
-        # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
-        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False, configuration= config)
         return redirect('payment_success', id=donor.id)
 
 class Success(View):
@@ -152,36 +181,45 @@ class Success(View):
         context={ 
             "donor":donor, 
             "reciever":fund_list[0]
-            }
+        }
         return render(request, "charity/success.html", context)
 
 class GeneratePdf(View):
     def get(self, request,id):
         config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
         pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False, configuration= config)
-        # pdf = html_to_pdf('charity/success.html')
-        # return HttpResponse(pdf, content_type='application/pdf')
-        # config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
-        # pdf = pdfkit.from_url(f'127.0.0.1:8000/charge/{id}',False,configuration=config)
         response = HttpResponse(pdf,content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
         return response
 class SuccessPayment(View):
     def get(self, request):
         return render(request, "charity/success.html", context={})
-class khaltiView(View):
-    def get(self, request):
-        return render(request, "charity/khalti.html", context={})
 
-    def post(self, request):
-        import requests
-        url = "https://khalti.com/api/v2/merchant-transaction/"
-        payload = {}
-        headers = {
-        "Authorization": "test_secret_key_e43b5e00c2dc4048a44f908023018b4b"
-        }
-        response = requests.get(url, payload, headers = headers)
+@csrf_exempt
+def verify_payment(request, id):
+    data = request.POST
+    product_id = data['product_identity']
+    token = data['token']
+    amount = data['amount']
+    url = "https://khalti.com/api/v2/payment/verify/"
+    payload = {
+        "token": token,
+        "amount": amount
+    }
+    headers = {
+        "Authorization": "Key test_secret_key_91de2c5b38144ba59b14fe0458a84276"
+    }
+    response = requests.post(url, payload, headers = headers)
+    response_data = json.loads(response.text)
+    status_code = str(response.status_code)
+    donor = DonorList.objects.create(email = request.user.email, name = response_data['user']['name'], amount=int(amount), message='donation', donated_to=id, current_user=request.user.id)
+    if status_code == '400':
+        response = JsonResponse({'status':'false', 'message': response_data['detail']}, status=500)
         return response
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(response_data)
+    return JsonResponse("Thanks for your donation", safe=False)   
 
 class AdminRequestView(View):
     def get(self, request):
@@ -190,11 +228,6 @@ class AdminRequestView(View):
         else:
             data = FundRequestModel.objects.all()
             image = MultipleImage.objects.all()
-            # a=[]
-            # for d in data:
-            #     for img in image:
-            #         if(img.fund==d.id):
-            #             a.append(img)
             return render(request, "charity/admin-verify-request.html", context={"data":data,"img":image})
 
 def verification_true(self,id):
@@ -244,7 +277,6 @@ class RequestsView(View):
         fund = FundRequestModel.objects.filter(id=pk).first()
         image = MultipleImage.objects.filter(fund=pk).first()
         donor_list = DonorList.objects.all()
-        # fund_request = FundRequestModel.objects.all()
         lists = []
         for donor in donor_list:
             if(donor.donated_to == fund.id):
@@ -307,7 +339,7 @@ def delete(request, id):
 class Testimonials(View):
     def get(self, request):
         donor = DonorList.objects.filter(email=request.user.email)
-        data = Testimonial.objects.all()
+        data = Testimonial.objects.filter(verification_status=True)
         page = request.GET.get('page', 1)
         paginator = Paginator(data, 3)
         try:
@@ -332,4 +364,17 @@ class PostTestimonial(View):
         Testimonial.objects.create(name=name, profession=profession,review_message=review_message, donated_to=donated_to, image=image)
         return redirect('testimonials')
 
-    
+class AdminVerifyTestimonials(View):
+    def get(self, request):
+        data = Testimonial.objects.all()
+        return render(request, "charity/admin-verify-testimonials.html", context={"data":data})
+
+def testimonial_verified_as_true(request, id):
+    testimonial = get_object_or_404(Testimonial, id=id)
+    testimonial.verification_true()
+    return redirect('admin-verify-testimonial')
+
+def testimonial_verified_as_false(request, id):
+    testimonial = get_object_or_404(Testimonial, id=id)
+    testimonial.verification_false()
+    return redirect('admin-verify-testimonial')

@@ -17,7 +17,7 @@
     {% if d.amount|to_int != d.amount_recieved|to_int and d.amount|to_int > d.amount_recieved|to_int %}
     <div class="col-sm-4 mb-3" id="reasons">
       <a style="text-decoration: none; color: black;" href="{% url 'requests' d.id %}">
-        <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 21rem;">
+        <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 22rem;">
           {% for i in img %}
             {% if i.fund == d %}
               <img src="{{ i.image1.url }}" class="card-img-top" alt="image">
@@ -25,13 +25,13 @@
           {% endfor %}
         <div class="card-body">
           <h5 class="card-title text-info">{{d.reason}}</h5>
-          <p class="card-text text-success">Name:  {{d.name}}</p>
-          <p class="card-text text-success"> Amount:  {{d.amount}}</p>
-          <p class="card-text text-success"> Posted At:  {{d.postted_at}}</p>
+          <p class="card-text" style="color: #e7a924;">Name:  {{d.name}}</p>
+          <p class="card-text" style="color: #e7a924;"> Amount:  {{d.amount}}</p>
+          <p class="card-text" style="color: #e7a924;"> Posted At:  {{d.postted_at}}</p>
           {% if d.verification_status is Null or d.verification_status is False%}
-          <h6 class="card-text text-success">Status:  Pending </h6>
+          <h6 class="card-text" style="color: #e7a924;">Status:  Pending </h6>
           {% elif d.verification_status is True %}
-          <h6 class="card-text text-success">Status: Verified </h6>
+          <h6 class="card-text" style="color: #e7a924;">Status: Verified </h6>
           {% endif %}
       </div>
       <div class="card-body">
