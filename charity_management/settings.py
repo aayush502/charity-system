@@ -192,7 +192,7 @@ EMAIL_HOST_USER = "testingdjango987@gmail.com"
 EMAIL_HOST_PASSWORD = "testing321@"
 
 CELERY_BROKER_URL = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
-CELERY_RESULT_BACKEND = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
+# CELERY_RESULT_BACKEND = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
 # CELERY_BROKER_URL = 'redis://localhost:6379'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
