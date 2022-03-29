@@ -41,11 +41,12 @@ INSTALLED_APPS = [
     'charity',
     'jquery',
     'wkhtmltopdf',
+    'django_celery_beat',
+    'django_celery_results',
 ]
-# WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
-# WKHTMLTOPDF_CMD_OPTIONS = {
-#     'quiet': True,
-# }
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
