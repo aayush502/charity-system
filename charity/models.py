@@ -1,5 +1,3 @@
-from distutils.command.upload import upload
-from statistics import mode
 from django.db import models
 from django_currentuser.middleware import get_current_authenticated_user, get_current_user
 import datetime
