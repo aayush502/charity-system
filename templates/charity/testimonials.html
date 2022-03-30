@@ -2,10 +2,10 @@
 {% block content %}
 <div class="container">
 {% if donor %}
-<a class="btn btn-outline-dark bg-gradient text-center mt-3" href="/create-testimonials">Post Testimonial</a>
+<a class="btn btn-outline-success mt-3" href="/create-testimonials">Post Testimonial</a>
 {% endif %}
 <h3 class="text-center">Here is what our donors say!!</h3>
-<div class="wrapper">
+<div class="wrapper ">
   {% for d in data %}
     <div class="box ">
       <i class="fas fa-quote-left quote"></i>
@@ -22,26 +22,29 @@
     </div>
     {% endfor %}
     </div>
+    <div class="center">
     {% if data.has_other_pages %}
-    <ul class="pagination" style="margin-bottom: 60px;" >
-    {% if data.has_previous %}
-      <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in data.paginator.page_range %}
-      {% if data.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    <ul class="pagination mt-3">
+      {% if data.has_previous %}
+        <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
       {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        <li class="disabled"><span>&laquo;</span></li>
       {% endif %}
-    {% endfor %}
-    {% if data.has_next %}
-      <li><a href="?page={{ data.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-</div>
-{% endif %}
+      {% for i in data.paginator.page_range %}
+        {% if data.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if data.has_next %}
+        <li><a href="?page={{ data.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+  {% endif %}
+  </div>
+    </div>
+
 {% endblock content %}
