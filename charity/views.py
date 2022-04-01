@@ -184,7 +184,7 @@ class Success(View):
 
 class GeneratePdf(View):
     def get(self, request,id):
-        # # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+        # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
         # if platform.system() == "Windows":
         #     pdfkit_config = pdfkit.configuration(wkhtmltopdf=os.environ.get('WKHTMLTOPDF_BINARY', 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'))
         # else:
@@ -194,9 +194,7 @@ class GeneratePdf(View):
         #     pdfkit_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
         if 'DYNO' in os.environ:
                 print ('loading wkhtmltopdf path on heroku')
-                WKHTMLTOPDF_CMD = subprocess.Popen(
-                    ['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')], # Note we default to 'wkhtmltopdf' as the binary name
-                    stdout=subprocess.PIPE).communicate()[0].strip()
+                WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')],stdout=subprocess.PIPE).communicate()[0].strip()
         else:
             print ('loading wkhtmltopdf path on localhost')
             WKHTMLTOPDF_CMD =  pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
