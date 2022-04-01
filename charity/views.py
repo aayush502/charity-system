@@ -1,5 +1,3 @@
-
-from math import fabs
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
@@ -12,7 +10,7 @@ from django.conf import settings
 from django.http.response import JsonResponse, HttpResponse
 from .forms import *
 from charity.tasks import *
-import os
+import os, sys, subprocess, platform
 import pdfkit
 from .process import html_to_pdf 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -187,7 +185,15 @@ class Success(View):
 class GeneratePdf(View):
     def get(self, request,id):
         # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
-        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',"donation.pdf")
+        if platform.system() == "Windows":
+            pdfkit_config = pdfkit.configuration(wkhtmltopdf=os.environ.get('WKHTMLTOPDF_BINARY', 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'))
+        else:
+            os.environ['PATH'] += os.pathsep + os.path.dirname(sys.executable) 
+            WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf')], 
+                stdout=subprocess.PIPE).communicate()[0].strip()
+            pdfkit_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
+        pdf = pdfkit.from_string(False,configuration=pdfkit_config)
+        # pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False)
         response = HttpResponse(pdf,content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
         return response
