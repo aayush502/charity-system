@@ -186,11 +186,12 @@ class Success(View):
 
 class GeneratePdf(View):
     def get(self, request,id):
-        config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
-        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False, configuration= config)
+        # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',"donation.pdf")
         response = HttpResponse(pdf,content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
         return response
+
 class SuccessPayment(View):
     def get(self, request):
         return render(request, "charity/success.html", context={})
