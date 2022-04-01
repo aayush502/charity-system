@@ -192,7 +192,7 @@ class GeneratePdf(View):
             WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf')], 
                 stdout=subprocess.PIPE).communicate()[0].strip()
             pdfkit_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
-        pdf = pdfkit.from_string(False,configuration=pdfkit_config)
+        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False,configuration=pdfkit_config)
         # pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False)
         response = HttpResponse(pdf,content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
