@@ -197,7 +197,7 @@ class GeneratePdf(View):
             WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')],stdout=subprocess.PIPE).communicate()[0].strip()
         else:
             print ('loading wkhtmltopdf path on localhost')
-            WKHTMLTOPDF_CMD =  pdfkit.configuration(wkhtmltopdf=bytes('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe', 'utf-8'))
+            WKHTMLTOPDF_CMD =  pdfkit.configuration(wkhtmltopdf=bytes('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe', 'utf8'))
         pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False,configuration=WKHTMLTOPDF_CMD)
         # pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False)
         response = HttpResponse(pdf,content_type='application/pdf')
