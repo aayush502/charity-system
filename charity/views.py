@@ -184,21 +184,15 @@ class Success(View):
 
 class GeneratePdf(View):
     def get(self, request,id):
-        # config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
-        # if platform.system() == "Windows":
-        #     pdfkit_config = pdfkit.configuration(wkhtmltopdf=os.environ.get('WKHTMLTOPDF_BINARY', 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'))
-        # else:
-        #     os.environ['PATH'] += os.pathsep + os.path.dirname(sys.executable) 
-        #     WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf')], 
-        #         stdout=subprocess.PIPE).communicate()[0].strip()
-        #     pdfkit_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
         if 'DYNO' in os.environ:
             print ('loading wkhtmltopdf path on heroku')
             WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')],stdout=subprocess.PIPE).communicate()[0].strip()
+            pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}', False, configuration=WKHTMLTOPDF_CMD)
+
         else:
             print ('loading wkhtmltopdf path on localhost')
-            WKHTMLTOPDF_CMD =  pdfkit.configuration(wkhtmltopdf=bytes('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe', 'utf8'))
-        pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False,configuration=WKHTMLTOPDF_CMD)
+            WKHTMLTOPDF_CMD =  pdfkit.configuration(wkhtmltopdf=bytes('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe','utf-8'))
+            pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}', False, configuration=WKHTMLTOPDF_CMD)
         # pdf = pdfkit.from_url(f'127.0.0.1:8000/payment_success/{id}',False)
         response = HttpResponse(pdf,content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="donate.pdf"'
