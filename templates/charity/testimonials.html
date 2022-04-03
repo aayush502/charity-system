@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
 {% if donor %}
-<a class="btn btn-outline-success mt-3" href="/create-testimonials">Post Testimonial</a>
+<a class="btn btn-outline-success" href="/create-testimonials">Post Testimonial</a>
 {% endif %}
 <h3 class="text-center">Here is what our donors say!!</h3>
 <div class="wrapper ">
@@ -24,7 +24,7 @@
     </div>
     <div class="center">
     {% if data.has_other_pages %}
-    <ul class="pagination mt-3">
+    <ul class="pagination" style="margin-top: 10px; margin-bottom: 80px;">
       {% if data.has_previous %}
         <li><a href="?page={{ data.previous_page_number }}">&laquo;</a></li>
       {% else %}

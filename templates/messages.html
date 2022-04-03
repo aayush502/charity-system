@@ -4,12 +4,14 @@
   <div class="container-fluid p-0">
     <div class="col-md-6">
       {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-      <div class="alert alert-danger alert-dismissible fade show">
-        Important:
+      <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        </button>
+        <span class="glyphicon glyphicon-ok"></span> <strong>Error Message</strong>
         <hr class="message-inner-separator">
       {{ message }}
-    </div>
       {% endif %}
+    </div>
       {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
       <div class="alert alert-success">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">

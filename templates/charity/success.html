@@ -1,10 +1,10 @@
 {% extends "charity/header.html" %}
 {% load static %}
 {% block content %}
-<div class="h1 text-center mt-5 mb-5">
+<div class="h1 text-center mt-5">
     Thank You For your Donation
 </div>
-<div class="row text-center mt-4">
+<div class="row text-center">
     <div class="col-sm-6">
         <p>Name</p>
         <p>{{ donor.name }}</p>
@@ -14,7 +14,7 @@
         <p>Rs {{ donor.amount }}</p>
     </div>
 </div>
-<div class="row text-center mt-4">
+<div class="row text-center">
     <div class="col-sm-6">
         <p>Email</p>
         <p>{{ donor.email }}</p>
@@ -24,7 +24,7 @@
         <p>{{ donor.message }}</p>
     </div>
 </div>
-<div class="row text-center mt-4">
+<div class="row text-center">
     <div class="col-sm-6">
         <p>Donated To</p>
         <p>{{ reciever.name }}</p>
@@ -33,12 +33,13 @@
         <p>Reciever Email</p>
         <p>{{ reciever.email }}</p>
     </div>
-    
-    <div class="col-md-6 mb-4">
-        <a href="{% url 'pdf' donor.id%}" class="card-link btn btn-default btn-outline-dark">Pdf Download</a>
+</div>
+    <div class="row text-center mb-4">
+    <div class="col-md-6 mb-2">
+        <a href="{% url 'pdf' donor.id%}" class="card-link btn btn-default btn-outline-success">Pdf Download</a>
     </div>
-    <div class="col-md-6 mb-4">
-        <a href="{% url 'home'%}" class="card-link btn btn-default btn-outline-dark">Back To Home</a>
+    <div class="col-md-6 mb-5">
+        <a href="{% url 'home'%}" class="card-link btn btn-default btn-outline-success ">Back To Home</a>
     </div>
 </div>
 {% endblock %}

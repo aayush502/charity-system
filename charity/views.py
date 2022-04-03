@@ -26,7 +26,7 @@ class AboutView(View):
 class RequestFund(View):
     def get(self, request):
         if 'user_id' not in request.session:
-            return redirect('/login')
+            return redirect('/login_register')
         else:
             data = FundRequestModel.objects.all()
             return render(request, "charity/request_fund.html", context={"data": data})
@@ -63,7 +63,7 @@ def bubble_sort(arr):
 class Requests(View):
     def get(self, request):
         if 'user_id' not in request.session:
-            return redirect('/login')
+            return redirect('/login_register')
         else:
             user = NewUser.objects.all()
             fund_request = FundRequestModel.objects.all()
@@ -87,7 +87,7 @@ class Requests(View):
 class NgoRequestView(View):
     def get(self, request):
         if 'user_id' not in request.session:
-            return redirect('/login')
+            return redirect('/login_register')
         else:
             user = NewUser.objects.all()
             fund_request = FundRequestModel.objects.all()
@@ -111,7 +111,7 @@ class NgoRequestView(View):
 class PendingRequest(View):
     def get(self, request):
         if 'user_id' not in request.session:
-            return redirect('/login')
+            return redirect('/login_register')
         else:
             user = NewUser.objects.all()
             fund_request = FundRequestModel.objects.all()

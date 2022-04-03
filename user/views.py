@@ -11,11 +11,11 @@ from .models import *
 import pdb
 from django.contrib.auth.views import LoginView
 
-class RegisterRequest(View):
+class LoginOrRegister(View):
     def get(self, request):
-        form = NewUserForm()
-        return render(request, 'user/register.html', context={"form":form})
-    
+        return render(request, "user/loginorregister.html")
+
+class RegisterRequest(View):
     def post(self, request):
         user = request.POST.get('name')
         email = request.POST.get('email')
@@ -26,11 +26,9 @@ class RegisterRequest(View):
             reg = NewUser(user_name=user, email=email, password=password).save()
         else:
             messages.error(request, "Password donot match.")
-        return redirect('/login')
+        return redirect('/login_register')
 
 class LoginRequest(View):
-    def get(self, request):
-        return render(request, "user/login.html", context={})
 
     def post(self, request):
         username = request.POST.get('user')
@@ -65,8 +63,8 @@ class LoginRequest(View):
             messages.success(request, "You Have Been Successfully Logged In")
             return redirect('home')
         else:
-            messages.error(request, "username or password not match", extra_tags='alert')
-            return redirect('/login')
+            messages.error(request, "username or password does not match")
+            return redirect('/login_register')
         
             
 
@@ -75,9 +73,9 @@ class Logout(View):
         try:
             del request.session['user_id']
         except:
-            return redirect('/login')
+            return redirect('/login_register')
         messages.error(request, "You Have Been Successfully Logged Out")
-        return redirect('/login')
+        return redirect('/login_register')
 
 
 

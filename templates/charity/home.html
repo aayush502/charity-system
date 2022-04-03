@@ -5,8 +5,8 @@
 {% include 'messages.html' %}
 <div class="container mt-5 mb-5">
   <div class="col" style="margin-bottom: 20px;">
-   Category 
-  <select class="js-example-basic-single" id="cat" style="width: 15%;" onchange="location=this.value;">
+   Category: 
+  <select class="js-example-basic-single" id="cat" style="width: 17%;" onchange="location=this.value;">
     <option value="">Select an option</option>
     <option value="/"> User </option>
     <option value="ngo-request"> NGO </option>
@@ -20,7 +20,7 @@
         <div class="card text-white bg-dark bg-gradient border-warning opacity-25 mb-3" style="width: 22rem;">
           {% for i in img %}
             {% if i.fund == d %}
-              <img src="{{ i.image1.url }}" class="card-img-top" alt="image">
+              <img src="{{ i.image1.url }}" class="card-img-top" style="height: 200px;" alt="image">
             {% endif %}
           {% endfor %}
         <div class="card-body">
