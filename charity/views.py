@@ -345,17 +345,20 @@ def delete(request, id):
 
 class Testimonials(View):
     def get(self, request):
-        donor = DonorList.objects.filter(email=request.user.email)
-        data = Testimonial.objects.filter(verification_status=True)
-        page = request.GET.get('page', 1)
-        paginator = Paginator(data, 3)
-        try:
-            data_list = paginator.page(page)
-        except PageNotAnInteger:
-            data_list = paginator.page(1)
-        except EmptyPage:
-            data_list = paginator.page(paginator.num_pages)
-        return render(request, "charity/testimonials.html", context={"data":data_list, "donor":donor})
+        if 'user_id' not in request.session:
+            return redirect('/login_register')
+        else:
+            donor = DonorList.objects.filter(email=request.user.email).first()
+            data = Testimonial.objects.filter(verification_status=True)
+            page = request.GET.get('page', 1)
+            paginator = Paginator(data, 3)
+            try:
+                data_list = paginator.page(page)
+            except PageNotAnInteger:
+                data_list = paginator.page(1)
+            except EmptyPage:
+                data_list = paginator.page(paginator.num_pages)
+            return render(request, "charity/testimonials.html", context={"data":data_list, "donor":donor})
 
 class PostTestimonial(View):
     def get(self, request):

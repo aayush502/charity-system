@@ -83,45 +83,45 @@ WSGI_APPLICATION = 'charity_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'd3eo3m22v44bac',
-
-        'USER': 'tgiqzyoefreinv',
-
-        'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
-
-        'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
-
-        'PORT': '5432',
-
-    }
-
-}
-
 # DATABASES = {
 
 #     'default': {
 
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-#         'NAME': 'charity',
+#         'NAME': 'd3eo3m22v44bac',
 
-#         'USER': 'postgres',
+#         'USER': 'tgiqzyoefreinv',
 
-#         'PASSWORD': 'root',
+#         'PASSWORD': '213afd499904ec18c14651bf30e13a930fa3fbcde6c9f423f13ca2dbb80abc1f',
 
-#         'HOST': 'localhost',
+#         'HOST': 'ec2-3-219-63-251.compute-1.amazonaws.com',
 
 #         'PORT': '5432',
 
 #     }
 
 # }
+
+DATABASES = {
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'charity',
+
+        'USER': 'postgres',
+
+        'PASSWORD': 'root',
+
+        'HOST': 'localhost',
+
+        'PORT': '5432',
+
+    }
+
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -193,10 +193,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "testingdjango987@gmail.com"
 EMAIL_HOST_PASSWORD = "testing321@"
 
-CELERY_BROKER_URL = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
+# CELERY_BROKER_URL = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
 # CELERY_RESULT_BACKEND = 'rediss://:p4bb504fed77d0cd4c15dc9c6c8c54cb2bebc1584d7e1676bc6fb8e21f6fdc2d9@ec2-44-196-70-155.compute-1.amazonaws.com:12390'
-# CELERY_BROKER_URL = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
